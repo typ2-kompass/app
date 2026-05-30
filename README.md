@@ -2,7 +2,7 @@
 
 Next.js (TypeScript) + Tailwind CSS — App-Layer für [typ2-kompass.de](https://typ2-kompass.de).
 
-> **Wichtig:** Diese App läuft unter `app.typ2-kompass.de`. Die Haupt-Domain `typ2-kompass.de` zeigt weiterhin auf die bestehende WordPress-Seite und wird durch dieses Repo **nicht** verändert.
+> **Wichtig:** Diese App läuft unter `mein.typ2-kompass.de`. Die Haupt-Domain `typ2-kompass.de` zeigt weiterhin auf die bestehende WordPress-Seite und wird durch dieses Repo **nicht** verändert.
 
 ---
 
@@ -40,7 +40,7 @@ npm run dev
 Die App wird über **Cloudflare Pages** ausgeliefert. Build & Deploy laufen aus **GitHub Actions** (Workflow `.github/workflows/deploy.yml`) mit dem Wrangler-CLI gegen das Pages-Projekt `typ2-kompass-app`.
 
 - **Default-URL:** `https://typ2-kompass-app.pages.dev` (immer verfügbar, von Cloudflare gestellt).
-- **Custom-Domain:** `https://app.typ2-kompass.de` — wird gesetzt, sobald die Domain im Cloudflare-Account freigegeben und der CNAME bei checkdomain gepflegt ist.
+- **Custom-Domain:** `https://mein.typ2-kompass.de` — wird gesetzt, sobald die Domain im Cloudflare-Account freigegeben und der CNAME bei checkdomain gepflegt ist.
 
 ### Architektur
 
@@ -54,13 +54,13 @@ GitHub Actions  ──►  npm ci → npm run pages:build (@cloudflare/next-on-p
 wrangler pages deploy  ──►  Cloudflare Pages (typ2-kompass-app)
         │
         ▼
-typ2-kompass-app.pages.dev   +   app.typ2-kompass.de (CNAME)
+typ2-kompass-app.pages.dev   +   mein.typ2-kompass.de (CNAME)
 ```
 
 - **Hosting:** Cloudflare Pages (Free-Tier), Account `info@typ2-kompass.de`.
 - **Adapter:** [`@cloudflare/next-on-pages`](https://github.com/cloudflare/next-on-pages) — App-Router auf Cloudflare Workers.
 - **Runtime:** `compatibility_flags = ["nodejs_compat"]`, `compatibility_date = "2025-05-01"` (siehe `wrangler.toml`).
-- **DNS:** `app.typ2-kompass.de` als CNAME auf `typ2-kompass-app.pages.dev` (verwaltet bei [checkdomain](https://www.checkdomain.de/)). Haupt-Domain `typ2-kompass.de` bleibt unverändert auf WordPress (185.3.235.231).
+- **DNS:** `mein.typ2-kompass.de` als CNAME auf `typ2-kompass-app.pages.dev` (verwaltet bei [checkdomain](https://www.checkdomain.de/)). Haupt-Domain `typ2-kompass.de` bleibt unverändert auf WordPress (185.3.235.231).
 
 ### Benötigte GitHub-Secrets (einmalig)
 
@@ -75,7 +75,7 @@ Ohne diese Secrets schlägt der Deploy-Workflow fehl — der CI-Workflow (Lint/T
 
 ### Production-Deploys
 
-Push auf `main` → GitHub-Actions-Workflow `Deploy` → `wrangler pages deploy` → neue Production-Version auf `typ2-kompass-app.pages.dev` und (sobald CNAME aktiv) `app.typ2-kompass.de`.
+Push auf `main` → GitHub-Actions-Workflow `Deploy` → `wrangler pages deploy` → neue Production-Version auf `typ2-kompass-app.pages.dev` und (sobald CNAME aktiv) `mein.typ2-kompass.de`.
 
 Manueller Deploy lokal (selten gebraucht, erfordert lokal `wrangler login` oder `CLOUDFLARE_API_TOKEN` im Environment):
 
@@ -85,11 +85,11 @@ npm run pages:deploy
 
 ### Custom-Domain ergänzen
 
-Sobald die Hostname-Reservierung für `app.typ2-kompass.de` im Cloudflare-Account frei ist:
+Sobald die Hostname-Reservierung für `mein.typ2-kompass.de` im Cloudflare-Account frei ist:
 
-1. Cloudflare-Pages-API oder Dashboard → Projekt `typ2-kompass-app` → *Custom domains* → `app.typ2-kompass.de` hinzufügen.
+1. Cloudflare-Pages-API oder Dashboard → Projekt `typ2-kompass-app` → *Custom domains* → `mein.typ2-kompass.de` hinzufügen.
 2. Cloudflare zeigt CNAME-Ziel `typ2-kompass-app.pages.dev`.
-3. Im checkdomain-Kundencenter: DNS-Eintrag `app` (Typ `CNAME`) → `typ2-kompass-app.pages.dev`. **A/AAAA/MX der Haupt-Domain unverändert lassen.**
+3. Im checkdomain-Kundencenter: DNS-Eintrag `mein` (Typ `CNAME`) → `typ2-kompass-app.pages.dev`. **A/AAAA/MX der Haupt-Domain unverändert lassen.**
 4. Zertifikat wird automatisch ausgestellt (1–5 Min).
 
 ### Rollback
