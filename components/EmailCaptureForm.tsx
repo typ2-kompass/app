@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { track } from "@/lib/analytics/track";
 
 type State = "idle" | "submitting" | "success" | "error";
 
@@ -17,6 +18,7 @@ export default function EmailCaptureForm() {
       return;
     }
     setState("submitting");
+    track({ name: "signup_started", props: { source: "landing" } });
     try {
       const res = await fetch("/api/waitlist", {
         method: "POST",
