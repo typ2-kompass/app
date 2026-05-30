@@ -17,6 +17,22 @@ jobs:
       contents: read
       deployments: write
     steps:
+      - name: Verify required secrets
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          missing=0
+          if [ -z "$CF_TOKEN" ]; then
+            echo "::error::Missing secret CLOUDFLARE_API_TOKEN — add it under Settings → Secrets and variables → Actions."
+            missing=1
+          fi
+          if [ -z "$CF_ACCOUNT" ]; then
+            echo "::error::Missing secret CLOUDFLARE_ACCOUNT_ID — add it under Settings → Secrets and variables → Actions."
+            missing=1
+          fi
+          if [ "$missing" = "1" ]; then exit 1; fi
+
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
