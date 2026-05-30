@@ -37,52 +37,64 @@ npm run dev
 
 ## Deployment — Cloudflare Pages
 
-`https://app.typ2-kompass.de` wird von **Cloudflare Pages** ausgeliefert. Jeder Push auf `main` triggert automatisch einen Production-Deploy. Pull Requests bekommen eine Preview-URL.
+Die App wird über **Cloudflare Pages** ausgeliefert. Build & Deploy laufen aus **GitHub Actions** (Workflow `.github/workflows/deploy.yml`) mit dem Wrangler-CLI gegen das Pages-Projekt `typ2-kompass-app`.
+
+- **Default-URL:** `https://typ2-kompass-app.pages.dev` (immer verfügbar, von Cloudflare gestellt).
+- **Custom-Domain:** `https://app.typ2-kompass.de` — wird gesetzt, sobald die Domain im Cloudflare-Account freigegeben und der CNAME bei checkdomain gepflegt ist.
 
 ### Architektur
 
 ```
-GitHub (main)  ──push──►  Cloudflare Pages Build
-                              │
-                              ▼
-                     @cloudflare/next-on-pages
-                     (next build → Workers)
-                              │
-                              ▼
-                  app.typ2-kompass.de (CNAME → Pages)
+GitHub (push main)
+        │
+        ▼
+GitHub Actions  ──►  npm ci → npm run pages:build (@cloudflare/next-on-pages)
+        │
+        ▼
+wrangler pages deploy  ──►  Cloudflare Pages (typ2-kompass-app)
+        │
+        ▼
+typ2-kompass-app.pages.dev   +   app.typ2-kompass.de (CNAME)
 ```
 
-- **Hosting:** Cloudflare Pages (Free-Tier).
-- **Adapter:** [`@cloudflare/next-on-pages`](https://github.com/cloudflare/next-on-pages) — App-Router + Edge-API-Routes ohne Vercel.
-- **Runtime:** Cloudflare Workers (`compatibility_flags = ["nodejs_compat"]`, siehe `wrangler.toml`).
-- **Node.js:** Build-Container nutzt Node 22 (siehe `.nvmrc`).
-- **DNS:** `app.typ2-kompass.de` ist ein CNAME auf das Pages-Projekt (verwaltet bei [checkdomain](https://www.checkdomain.de/)).
+- **Hosting:** Cloudflare Pages (Free-Tier), Account `info@typ2-kompass.de`.
+- **Adapter:** [`@cloudflare/next-on-pages`](https://github.com/cloudflare/next-on-pages) — App-Router auf Cloudflare Workers.
+- **Runtime:** `compatibility_flags = ["nodejs_compat"]`, `compatibility_date = "2025-05-01"` (siehe `wrangler.toml`).
+- **DNS:** `app.typ2-kompass.de` als CNAME auf `typ2-kompass-app.pages.dev` (verwaltet bei [checkdomain](https://www.checkdomain.de/)). Haupt-Domain `typ2-kompass.de` bleibt unverändert auf WordPress (185.3.235.231).
 
-### Ersteinrichtung (einmalig, durch FoundingEngineer)
+### Benötigte GitHub-Secrets (einmalig)
 
-1. **GitHub-Repo erstellen** und diesen Commit pushen:
-   ```bash
-   git remote add origin git@github.com:<owner>/typ2-kompass.git
-   git push -u origin main
-   ```
-2. **Cloudflare Pages**: Dashboard → *Workers & Pages* → *Create application* → *Pages* → *Connect to Git* → Repo `typ2-kompass` auswählen.
-3. **Build-Konfiguration** im Pages-Setup:
-   - Framework preset: **Next.js**
-   - Build command: `npm run pages:build`
-   - Build output directory: `.vercel/output/static`
-   - Root directory: `/` (Repo-Root)
-   - Environment variable: `NODE_VERSION = 22`
-4. **Custom Domain hinzufügen**: Pages-Projekt → *Custom domains* → `app.typ2-kompass.de` eintragen. Cloudflare zeigt den CNAME-Zielwert (z. B. `<project>.pages.dev`).
-5. **DNS bei checkdomain setzen**: Im checkdomain-Kundencenter unter DNS-Verwaltung für `typ2-kompass.de` einen CNAME-Eintrag `app` → `<project>.pages.dev` hinterlegen. TTL Standard. **Keine A/AAAA/MX-Einträge der Haupt-Domain anfassen** — die WordPress-Seite bleibt unberührt.
-6. **HTTPS verifizieren**: Cloudflare stellt automatisch ein Zertifikat aus (kann 1–5 Min dauern). Anschließend `https://app.typ2-kompass.de` aufrufen.
+Im Repo unter *Settings → Secrets and variables → Actions → New repository secret*:
+
+| Secret                  | Wert                                                           |
+| ----------------------- | -------------------------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN`  | Cloudflare-API-Token mit Scope `Account: Cloudflare Pages — Edit` |
+| `CLOUDFLARE_ACCOUNT_ID` | `c9fdac58848b011b5047a77f37ce65e2` (Account `info@typ2-kompass.de`) |
+
+Ohne diese Secrets schlägt der Deploy-Workflow fehl — der CI-Workflow (Lint/Typecheck) läuft unabhängig weiter.
 
 ### Production-Deploys
 
-Ab Punkt 5 reicht ein `git push` auf `main`. Branches und PRs bekommen automatisch eine Preview-URL der Form `https://<commit>.typ2-kompass.pages.dev`.
+Push auf `main` → GitHub-Actions-Workflow `Deploy` → `wrangler pages deploy` → neue Production-Version auf `typ2-kompass-app.pages.dev` und (sobald CNAME aktiv) `app.typ2-kompass.de`.
+
+Manueller Deploy lokal (selten gebraucht, erfordert lokal `wrangler login` oder `CLOUDFLARE_API_TOKEN` im Environment):
+
+```bash
+npm run pages:deploy
+```
+
+### Custom-Domain ergänzen
+
+Sobald die Hostname-Reservierung für `app.typ2-kompass.de` im Cloudflare-Account frei ist:
+
+1. Cloudflare-Pages-API oder Dashboard → Projekt `typ2-kompass-app` → *Custom domains* → `app.typ2-kompass.de` hinzufügen.
+2. Cloudflare zeigt CNAME-Ziel `typ2-kompass-app.pages.dev`.
+3. Im checkdomain-Kundencenter: DNS-Eintrag `app` (Typ `CNAME`) → `typ2-kompass-app.pages.dev`. **A/AAAA/MX der Haupt-Domain unverändert lassen.**
+4. Zertifikat wird automatisch ausgestellt (1–5 Min).
 
 ### Rollback
 
-Im Pages-Dashboard → *Deployments* → älteren Deploy auswählen → *Rollback to this deployment*. Geht in Sekunden, ohne Repo-Änderung.
+Cloudflare-Dashboard → *Workers & Pages* → `typ2-kompass-app` → *Deployments* → älteren Eintrag → *Rollback to this deployment*. Geht in Sekunden, kein Re-Push nötig.
 
 ---
 
@@ -100,7 +112,8 @@ Phase 1 ergänzt Variablen für Auth ([TYP-3](/TYP/issues/TYP-3)), Analytics ([T
 
 ## CI
 
-`.github/workflows/ci.yml` lintet und typecheckt bei jedem Push/PR auf `main`. Der eigentliche Deploy läuft separat über Cloudflare Pages.
+- `.github/workflows/ci.yml` — Lint + Typecheck bei jedem Push/PR auf `main`.
+- `.github/workflows/deploy.yml` — Build (`@cloudflare/next-on-pages`) + Wrangler-Deploy nach `typ2-kompass-app`, bei jedem Push auf `main`. Erfordert die Secrets oben.
 
 ---
 
@@ -126,6 +139,7 @@ lib/
 .github/
   workflows/
     ci.yml          # Lint + Typecheck bei Push/PR auf main
+    deploy.yml      # Build + Wrangler-Deploy nach Cloudflare Pages
 wrangler.toml       # Cloudflare-Pages-/Workers-Konfiguration
 .nvmrc              # Node-Version für Build-Container (22)
 ```
