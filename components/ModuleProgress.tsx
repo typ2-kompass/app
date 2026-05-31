@@ -8,11 +8,16 @@ import { bucketDurationMs } from "@/lib/analytics/events";
 import { de } from "@/lib/i18n/messages/de";
 
 type State =
+  | { kind: "loading" }
   | { kind: "idle" }
   | { kind: "submitting" }
   | { kind: "completed" }
   | { kind: "login_required" }
   | { kind: "error"; message: string };
+
+type StatusResponse =
+  | { completed: boolean }
+  | { ok: false; loginRequired?: boolean };
 
 type CompleteResponse =
   | { ok: true; completed: true }
@@ -20,9 +25,40 @@ type CompleteResponse =
 
 export default function ModuleProgress({ slug }: { slug: string }) {
   const t = de.modulePage;
-  const [state, setState] = useState<State>({ kind: "idle" });
+  const [state, setState] = useState<State>({ kind: "loading" });
   const openedAt = useRef<number>(Date.now());
   const trackedOpen = useRef(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    // Fetch completion status from edge — determines whether to show the
+    // button or the success state without a server-side session read on the
+    // (cached) static page.
+    fetch(`/api/module/${encodeURIComponent(slug)}/complete`, {
+      credentials: "include",
+      cache: "no-store",
+    })
+      .then((res) => res.json() as Promise<StatusResponse>)
+      .then((data) => {
+        if (cancelled) return;
+        if ("loginRequired" in data && data.loginRequired) {
+          setState({ kind: "idle" });
+          return;
+        }
+        if ("completed" in data && data.completed) {
+          setState({ kind: "completed" });
+          return;
+        }
+        setState({ kind: "idle" });
+      })
+      .catch(() => {
+        if (!cancelled) setState({ kind: "idle" });
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [slug]);
 
   useEffect(() => {
     if (trackedOpen.current) return;
@@ -59,19 +95,29 @@ export default function ModuleProgress({ slug }: { slug: string }) {
     }
   }
 
+  if (state.kind === "loading") {
+    return (
+      <section className="mt-12 rounded-2xl border border-slate-100 bg-kompass-mist p-6">
+        <div className="h-6 w-32 animate-pulse rounded bg-slate-200" />
+      </section>
+    );
+  }
+
+  if (state.kind === "completed") {
+    return (
+      <section className="mt-12 rounded-2xl border border-teal-100 bg-teal-50 p-6">
+        <p className="font-medium text-kompass-accent">{t.completeSuccess}</p>
+      </section>
+    );
+  }
+
   return (
     <section className="mt-12 rounded-2xl border border-slate-100 bg-kompass-mist p-6">
       <h2 className="mb-2 text-lg font-bold text-kompass-ink">{t.completeHeading}</h2>
       <p className="mb-5 text-sm leading-relaxed text-slate-600">{t.completeIntro}</p>
 
-      {state.kind === "completed" && (
-        <p className="rounded-xl bg-teal-50 px-4 py-3 text-sm font-medium text-kompass-accent">
-          {t.completeSuccess}
-        </p>
-      )}
-
       {state.kind === "login_required" && (
-        <div className="rounded-xl border border-kompass-accent/30 bg-white p-5">
+        <div className="mb-4 rounded-xl border border-kompass-accent/30 bg-white p-5">
           <h3 className="mb-2 text-base font-semibold text-kompass-ink">
             {t.loginRequiredHeading}
           </h3>
