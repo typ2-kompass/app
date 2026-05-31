@@ -31,6 +31,64 @@ export const de = {
     imprint: "Impressum",
     privacy: "Datenschutz",
   },
+  auth: {
+    login: {
+      heading: "Anmelden bei Typ2-Kompass",
+      subheading:
+        "Wir schicken dir einen Anmeldelink per E-Mail. Du brauchst kein Passwort.",
+      emailLabel: "E-Mail-Adresse",
+      emailPlaceholder: "name@beispiel.de",
+      submit: "Anmeldelink senden",
+      submitting: "Wird gesendet…",
+      consentLabel:
+        "Ich willige ein, dass meine E-Mail-Adresse zur Anmeldung gespeichert wird, damit mein Modul-Fortschritt erhalten bleibt. Es werden keine weiteren personenbezogenen Daten erhoben. Ich kann die Einwilligung jederzeit widerrufen.",
+      consentMissing:
+        "Bitte bestätige die Einwilligung, um dich anzumelden.",
+      errorInvalid: "Bitte gib eine gültige E-Mail-Adresse ein.",
+      errorGeneric:
+        "Anmeldung fehlgeschlagen. Bitte versuche es in einem Moment erneut.",
+      privacyNote:
+        "Wir speichern nur deine E-Mail-Adresse. Keine Profilangaben, keine Gesundheitsdaten.",
+    },
+    verifyRequest: {
+      heading: "Bitte prüfe deine E-Mails",
+      body: "Wir haben dir einen Anmeldelink an deine E-Mail-Adresse geschickt. Klicke auf den Link, um dich anzumelden — der Link ist 10 Minuten gültig.",
+      hint: "Keine E-Mail erhalten? Schau bitte im Spam-Ordner nach oder versuche es nach kurzer Zeit erneut.",
+      backToLogin: "Zurück zur Anmeldung",
+    },
+    account: {
+      heading: "Dein Konto",
+      emailLabel: "Angemeldet als",
+      signOut: "Abmelden",
+      signOutSubmitting: "Wird abgemeldet…",
+      deleteHeading: "Konto löschen",
+      deleteBody:
+        "Du kannst dein Konto und alle gespeicherten Daten jederzeit vollständig löschen. Die Funktion ist in Vorbereitung.",
+      privacyNote:
+        "Auf deinem Konto sind nur deine E-Mail-Adresse und dein Modul-Fortschritt gespeichert.",
+    },
+  },
+  modulePage: {
+    backToOverview: "Zurück zur Übersicht",
+    readingTimePrefix: "Lesezeit ca.",
+    readingTimeSuffix: "Min.",
+    medicalDisclaimer:
+      "Hinweis: Dieser Inhalt ersetzt keine ärztliche Beratung. Er ist zur Information und Reflexion gedacht.",
+    sourcesHeading: "Quellen",
+    completeHeading: "Modul abschließen",
+    completeIntro:
+      "Wenn du dieses Modul gelesen hast, markiere es als abgeschlossen. So weißt du beim nächsten Besuch, wo du stehst.",
+    completeButton: "Modul abschließen",
+    completeButtonSubmitting: "Wird gespeichert…",
+    completeSuccess: "Erledigt. Beim nächsten Besuch ist dieser Stand gespeichert.",
+    completeErrorGeneric:
+      "Speichern hat nicht geklappt. Bitte versuche es gleich noch einmal.",
+    loginRequiredHeading: "Anmelden, um den Stand zu speichern",
+    loginRequiredBody:
+      "Du kannst dieses Modul auch ohne Anmeldung lesen. Um deinen Fortschritt zu speichern und beim nächsten Besuch dort weiterzumachen, brauchst du eine kostenlose Registrierung per E-Mail. Es werden keine weiteren Daten zu deiner Person erhoben.",
+    loginCta: "Jetzt anmelden",
+    completedBadge: "Bereits abgeschlossen",
+  },
 } as const;
 
 export type Messages = typeof de;

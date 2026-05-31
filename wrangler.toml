@@ -2,3 +2,13 @@ name = "typ2-kompass"
 compatibility_date = "2025-05-01"
 compatibility_flags = ["nodejs_compat"]
 pages_build_output_dir = ".vercel/output/static"
+
+# D1 database binding for auth (users, sessions, consent).
+# The `database_id` below is a placeholder — replace with the real value from
+# `wrangler d1 create typ2-kompass-db` before deploying. The Cloudflare Pages
+# project also needs this binding configured in the dashboard (Settings →
+# Functions → D1 database bindings) so production picks it up.
+[[d1_databases]]
+binding = "DB"
+database_name = "typ2-kompass-db"
+database_id = "REPLACE_WITH_REAL_D1_DATABASE_ID"

@@ -100,13 +100,76 @@ Cloudflare-Dashboard → *Workers & Pages* → `typ2-kompass-app` → *Deploymen
 
 ## Umgebungsvariablen
 
-Lokale Variablen in `.env.local` eintragen (wird von Git ignoriert). Für die Produktion im **Cloudflare-Pages-Dashboard** unter *Settings → Environment variables* pflegen.
+Lokale Variablen in `.env.local` eintragen (wird von Git ignoriert). Für die Produktion müssen sie an **zwei Stellen** gepflegt werden:
 
-| Variable                        | Beschreibung                          | Erforderlich |
-| ------------------------------- | ------------------------------------- | ------------ |
-| *(keine Phase-0-Pflichtfelder)* |                                       |              |
+1. **Cloudflare Pages-Dashboard** → *Settings → Environment variables* (für Laufzeit-Secrets)
+2. **GitHub Actions Secrets** → *Settings → Secrets and variables → Actions* (für den Deploy-Job, soweit nötig)
 
-Phase 1 ergänzt Variablen für Auth ([TYP-3](/TYP/issues/TYP-3)), Analytics ([TYP-4](/TYP/issues/TYP-4)) und E-Mail-Provider.
+Eine vollständige Vorlage liegt in `.env.example`.
+
+| Variable         | Beschreibung                                                          | Erforderlich |
+| ---------------- | --------------------------------------------------------------------- | ------------ |
+| `AUTH_SECRET`    | Zufallsschlüssel für Auth.js-Session-Signatur (`openssl rand -base64 32`) | ✅ |
+| `RESEND_API_KEY` | API-Key vom Resend-Account (kostenloser Tarif reicht für Phase 1)     | ✅ |
+| `EMAIL_FROM`     | Absender-Adresse für Magic-Link-E-Mails (verifizierte Resend-Domain)  | ✅ |
+
+> **Datenschutz-Hinweis:** In der App werden **keine personenbezogenen Daten eingegeben**. Gespeichert wird ausschließlich die E-Mail-Adresse zur Identifikation sowie der Modul-Fortschritt. Alle Daten liegen in der Cloudflare-D1-Datenbank, die dem Cloudflare-Account `info@typ2-kompass.de` gehört.
+
+---
+
+## Auth (Magic Link)
+
+Anmeldung läuft über **Auth.js v5** mit dem Resend-E-Mail-Provider. Es gibt kein Passwort — der Nutzer gibt seine E-Mail ein und bekommt einen 10-minütigen Einmal-Link zugeschickt.
+
+### Routen
+
+| Route              | Beschreibung                                    |
+| ------------------ | ----------------------------------------------- |
+| `/`                | Redirect → `/account` (eingeloggt) oder `/login` |
+| `/login`           | Anmeldeformular (E-Mail + DSGVO-Consent)        |
+| `/verify-request`  | „Bitte prüfe deine E-Mails"-Bestätigungsseite   |
+| `/account`         | Konto-Seite (E-Mail + Abmelden); Auth erforderlich |
+| `/api/auth/[...nextauth]` | Auth.js-Handlers (GET + POST)          |
+
+### Lokal entwickeln (mit Datenbankzugriff)
+
+Für lokales Testen mit echter D1-Anbindung `wrangler pages dev` statt `next dev` verwenden:
+
+```bash
+# .dev.vars anlegen (wird von Git ignoriert):
+# AUTH_SECRET=<dein-secret>
+# RESEND_API_KEY=<dein-api-key>
+# EMAIL_FROM=Typ2-Kompass <no-reply@mein.typ2-kompass.de>
+
+npm run pages:build
+npx wrangler pages dev .vercel/output/static
+```
+
+Resend-Logs im Dashboard zeigen den Magic-Link, ohne dass die E-Mail tatsächlich ankommt (Testmodus aktivieren unter *Resend → Emails → Test mode*).
+
+---
+
+## Datenbank (Cloudflare D1)
+
+Auth-Sessions, Nutzer und DSGVO-Consent werden in einer **Cloudflare D1**-Datenbank gespeichert.
+
+### Einmalige Einrichtung
+
+```bash
+# 1. Datenbank anlegen (einmalig):
+npx wrangler d1 create typ2-kompass-db
+# → Ausgabe enthält die database_id, diese in wrangler.toml eintragen
+
+# 2. Schema anlegen:
+npx wrangler d1 execute typ2-kompass-db --file=drizzle/0000_init.sql
+
+# 3. D1-Binding in Cloudflare Pages einrichten:
+#    Dashboard → Workers & Pages → typ2-kompass-app
+#    → Settings → Functions → D1 database bindings
+#    Binding name: DB  |  D1 database: typ2-kompass-db
+```
+
+> Das Feld `database_id` in `wrangler.toml` enthält aktuell einen Platzhalter — nach dem Anlegen der Datenbank mit dem echten Wert ersetzen und committen.
 
 ---
 

@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export const runtime = "edge";
 
 export async function POST(request: Request) {
-  const body = await request.json().catch(() => null);
+  const body = (await request.json().catch(() => null)) as { email?: unknown } | null;
   const email: unknown = body?.email;
 
   if (typeof email !== "string" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
