@@ -107,11 +107,18 @@ Lokale Variablen in `.env.local` eintragen (wird von Git ignoriert). Für die Pr
 
 Eine vollständige Vorlage liegt in `.env.example`.
 
-| Variable         | Beschreibung                                                          | Erforderlich |
-| ---------------- | --------------------------------------------------------------------- | ------------ |
-| `AUTH_SECRET`    | Zufallsschlüssel für Auth.js-Session-Signatur (`openssl rand -base64 32`) | ✅ |
-| `RESEND_API_KEY` | API-Key vom Resend-Account (kostenloser Tarif reicht für Phase 1)     | ✅ |
-| `EMAIL_FROM`     | Absender-Adresse für Magic-Link-E-Mails (verifizierte Resend-Domain)  | ✅ |
+| Variable                       | Beschreibung                                                                              | Erforderlich |
+| ------------------------------ | ----------------------------------------------------------------------------------------- | ------------ |
+| `AUTH_SECRET`                  | Zufallsschlüssel für Auth.js-Session-Signatur (`openssl rand -base64 32`)                 | ✅           |
+| `RESEND_API_KEY`               | API-Key vom Resend-Account (kostenloser Tarif reicht für Phase 1)                         | ✅           |
+| `EMAIL_FROM`                   | Absender-Adresse für Magic-Link-E-Mails (verifizierte Resend-Domain)                      | ✅           |
+| `NEXT_PUBLIC_PLAUSIBLE_DOMAIN` | Plausible-Site-Domain (`mein.typ2-kompass.de`). Leer = Analytics deaktiviert.             | Phase 1      |
+| `PLAUSIBLE_API_KEY`            | Plausible-API-Key (nur Server, für `signup_completed` aus Magic-Link-Callback)            | Phase 1      |
+| `NEXT_PUBLIC_SENTRY_DSN`       | Sentry-DSN (öffentlich). Leer = Sentry-SDK no-op zur Laufzeit.                            | Phase 1      |
+| `SENTRY_AUTH_TOKEN`            | Sentry-API-Token, nur Build-Zeit, für Source-Map-Upload                                   | Phase 1      |
+| `SENTRY_ORG`                   | Sentry-Organisation-Slug                                                                  | Phase 1      |
+| `SENTRY_PROJECT`               | Sentry-Projekt-Slug (`typ2-kompass-web`)                                                  | Phase 1      |
+| `DEBUG_THROW_KEY`              | Zufallsschlüssel für `/api/__debug/throw` Verifikation (`openssl rand -hex 16`)           | Phase 1      |
 
 > **Datenschutz-Hinweis:** In der App werden **keine personenbezogenen Daten eingegeben**. Gespeichert wird ausschließlich die E-Mail-Adresse zur Identifikation sowie der Modul-Fortschritt. Alle Daten liegen in der Cloudflare-D1-Datenbank, die dem Cloudflare-Account `info@typ2-kompass.de` gehört.
 
