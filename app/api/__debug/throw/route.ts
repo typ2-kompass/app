@@ -1,3 +1,5 @@
+import * as Sentry from "@sentry/nextjs";
+
 // Verification endpoint: forces an uncaught error so we can confirm Sentry
 // receives it with a readable, source-mapped stack. Gated by a server-only
 // secret so it cannot be triggered by drive-by traffic.
@@ -14,7 +16,10 @@ export async function GET(request: Request): Promise<Response> {
   if (supplied !== expected) {
     return new Response("not found", { status: 404 });
   }
-  throw new Error(
+  const err = new Error(
     `typ2-kompass __debug/throw at ${new Date().toISOString()} — verifying error reporting wiring`,
   );
+  Sentry.captureException(err);
+  await Sentry.flush(2000);
+  throw err;
 }
