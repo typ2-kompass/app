@@ -23,7 +23,7 @@ export default function DebugThrowPage() {
     if (!armed) return;
     const t = setTimeout(() => {
       throw new Error(
-        `typ2-kompass /_throw at ${new Date().toISOString()} — verifying client error reporting wiring`,
+        `typ2-kompass /dev-throw at ${new Date().toISOString()} — verifying client error reporting wiring`,
       );
     }, 50);
     return () => clearTimeout(t);

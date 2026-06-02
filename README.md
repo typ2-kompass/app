@@ -118,7 +118,7 @@ Eine vollständige Vorlage liegt in `.env.example`.
 | `SENTRY_AUTH_TOKEN`            | Sentry-API-Token, nur Build-Zeit, für Source-Map-Upload                                   | Phase 1      |
 | `SENTRY_ORG`                   | Sentry-Organisation-Slug                                                                  | Phase 1      |
 | `SENTRY_PROJECT`               | Sentry-Projekt-Slug (`typ2-kompass-web`)                                                  | Phase 1      |
-| `NEXT_PUBLIC_DEBUG_THROW_KEY`  | Zufallsschlüssel für `/_throw` (Client) und `/api/__debug/throw` (Server-Log) Verifikation (`openssl rand -hex 16`) | Phase 1      |
+| `NEXT_PUBLIC_DEBUG_THROW_KEY`  | Zufallsschlüssel für `/dev-throw` (Client) und `/api/dev-throw` (Server-Log) Verifikation (`openssl rand -hex 16`) | Phase 1      |
 
 > **Datenschutz-Hinweis:** In der App werden **keine personenbezogenen Daten eingegeben**. Gespeichert wird ausschließlich die E-Mail-Adresse zur Identifikation sowie der Modul-Fortschritt. Alle Daten liegen in der Cloudflare-D1-Datenbank, die dem Cloudflare-Account `info@typ2-kompass.de` gehört.
 
