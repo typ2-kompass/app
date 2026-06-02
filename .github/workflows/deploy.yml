@@ -44,6 +44,17 @@ jobs:
         run: npm ci
 
       - name: Build for Cloudflare Pages
+        env:
+          # NEXT_PUBLIC_* values are inlined into the client bundle at build time,
+          # so they must come through GitHub Actions secrets (not Cloudflare Pages
+          # env vars, which only reach the runtime). The build step is a no-op for
+          # any missing key — SDKs are guarded and stay green without their config.
+          NEXT_PUBLIC_PLAUSIBLE_DOMAIN: ${{ secrets.NEXT_PUBLIC_PLAUSIBLE_DOMAIN }}
+          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          NEXT_PUBLIC_DEBUG_THROW_KEY: ${{ secrets.NEXT_PUBLIC_DEBUG_THROW_KEY }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
         run: npm run pages:build
 
       - name: Deploy to Cloudflare Pages
