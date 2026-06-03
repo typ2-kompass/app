@@ -1,0 +1,115 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import HeroIllustration from '~/components/HeroIllustration.astro';
+import Disclaimer from '~/components/Disclaimer.astro';
+import { buildArticleSchema, buildFaqSchema, buildMedicalConditionSchema } from '~/lib/schema';
+import { formatGermanDate, formatIsoDate } from '~/lib/site';
+
+type FaqItem = { q: string; a: string };
+type MedicalCondition = { name: string; code?: string };
+
+type Props = {
+  title: string;
+  metaTitle: string;
+  metaDescription: string;
+  slug: string;
+  datePublished: Date;
+  dateModified: Date;
+  nextReviewDate?: Date;
+  heroAlt: string;
+  schemaType?: 'Article' | 'MedicalScholarlyArticle';
+  faq?: FaqItem[];
+  medicalConditions?: MedicalCondition[];
+};
+
+const {
+  title,
+  metaTitle,
+  metaDescription,
+  slug,
+  datePublished,
+  dateModified,
+  nextReviewDate,
+  heroAlt,
+  schemaType = 'Article',
+  faq,
+  medicalConditions,
+} = Astro.props;
+
+const schemas = [
+  buildArticleSchema({
+    type: schemaType,
+    headline: title,
+    description: metaDescription,
+    slug,
+    datePublished,
+    dateModified,
+    heroImage: '/og-default.png',
+  }),
+  ...(faq && faq.length ? [buildFaqSchema(faq)] : []),
+  ...(medicalConditions ?? []).map((c) => buildMedicalConditionSchema(c.name, c.code)),
+];
+---
+
+<BaseLayout
+  title={metaTitle}
+  description={metaDescription}
+  canonical={slug}
+  ogType="article"
+  ogImage="/og-default.png"
+  jsonLd={schemas}
+>
+  <article class="article" lang="de">
+    <header>
+      <p class="article__eyebrow">Ratgeber · Typ-2-Diabetes</p>
+      <h1 class="article__title">{title}</h1>
+      <div class="article__meta">
+        <time datetime={formatIsoDate(datePublished)}>
+          Erstveröffentlichung: {formatGermanDate(datePublished)}
+        </time>
+        <span>·</span>
+        <time datetime={formatIsoDate(dateModified)}>
+          Aktualisiert: {formatGermanDate(dateModified)}
+        </time>
+      </div>
+    </header>
+
+    <HeroIllustration alt={heroAlt} />
+
+    <Disclaimer variant="compact" />
+
+    <div class="article__body">
+      <slot />
+    </div>
+
+    <Disclaimer />
+
+    <footer class="article__footer-meta">
+      <div>
+        <strong>Stand:</strong> {formatGermanDate(dateModified)}
+        {
+          nextReviewDate && (
+            <span>
+              {' '}· <strong>Nächste Prüfung:</strong> {formatGermanDate(nextReviewDate)}
+            </span>
+          )
+        }
+      </div>
+      <div>
+        Redaktion: Typ2-Kompass · Quellen: <a
+          href="https://www.leitlinien.de/themen/diabetes"
+          target="_blank"
+          rel="noopener nofollow">NVL Typ-2-Diabetes</a
+        >, <a
+          href="https://www.gesundheitsinformation.de/typ-2-diabetes.html"
+          target="_blank"
+          rel="noopener nofollow">IQWiG/Gesundheitsinformation.de</a
+        >, <a
+          href="https://www.rki.de/DE/Themen/Nichtuebertragbare-Krankheiten/Diabetes/diabetes_node.html"
+          target="_blank"
+          rel="noopener nofollow">RKI</a
+        >
+      </div>
+    </footer>
+  </article>
+</BaseLayout>

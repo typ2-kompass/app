@@ -1,0 +1,81 @@
+---
+type Props = {
+  alt: string;
+};
+const { alt } = Astro.props;
+---
+
+<figure class="article__hero">
+  <svg
+    viewBox="0 0 1200 480"
+    role="img"
+    aria-label={alt}
+    xmlns="http://www.w3.org/2000/svg"
+    preserveAspectRatio="xMidYMid slice"
+  >
+    <defs>
+      <linearGradient id="hero-bg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#e8f0ec" />
+        <stop offset="100%" stop-color="#cfe1d6" />
+      </linearGradient>
+      <linearGradient id="hero-arc-1" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#1f6a52" stop-opacity="0.0" />
+        <stop offset="55%" stop-color="#1f6a52" stop-opacity="0.55" />
+        <stop offset="100%" stop-color="#1f6a52" stop-opacity="0.85" />
+      </linearGradient>
+      <linearGradient id="hero-arc-2" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#b45309" stop-opacity="0.0" />
+        <stop offset="60%" stop-color="#b45309" stop-opacity="0.4" />
+        <stop offset="100%" stop-color="#b45309" stop-opacity="0.65" />
+      </linearGradient>
+    </defs>
+    <rect width="1200" height="480" fill="url(#hero-bg)" />
+
+    <!-- soft baseline grid -->
+    <g stroke="#ffffff" stroke-opacity="0.55" stroke-width="1">
+      <line x1="0" y1="380" x2="1200" y2="380" />
+      <line x1="0" y1="320" x2="1200" y2="320" />
+      <line x1="0" y1="260" x2="1200" y2="260" />
+      <line x1="0" y1="200" x2="1200" y2="200" />
+    </g>
+
+    <!-- gentle, descending curve = better trend over time -->
+    <path
+      d="M0 320 C 240 280, 420 360, 640 300 S 980 200, 1200 220"
+      fill="none"
+      stroke="url(#hero-arc-1)"
+      stroke-width="10"
+      stroke-linecap="round"
+    />
+    <path
+      d="M0 380 C 280 340, 480 400, 700 350 S 1020 280, 1200 290"
+      fill="none"
+      stroke="url(#hero-arc-2)"
+      stroke-width="6"
+      stroke-linecap="round"
+      opacity="0.85"
+    />
+
+    <!-- focal compass-needle motif -->
+    <g transform="translate(820 180)">
+      <circle r="92" fill="#ffffff" opacity="0.65" />
+      <circle r="72" fill="none" stroke="#1f6a52" stroke-width="2" opacity="0.6" />
+      <circle r="48" fill="none" stroke="#1f6a52" stroke-width="1.5" opacity="0.45" />
+      <path d="M0 -60 L10 0 L0 60 L-10 0 Z" fill="#1f6a52" />
+      <circle r="6" fill="#1a1d23" />
+    </g>
+
+    <!-- type lockup -->
+    <g font-family="'Source Serif 4', Georgia, serif" fill="#1a1d23">
+      <text x="80" y="180" font-size="56" font-weight="600" letter-spacing="-1">
+        Typ-2-Diabetes
+      </text>
+      <text x="80" y="240" font-size="40" font-weight="500" fill="#1f6a52">
+        verstehen.
+      </text>
+      <text x="80" y="290" font-size="20" fill="#4b5260" font-family="Inter, sans-serif">
+        Was die Diagnose bedeutet — und welche Schritte wirken.
+      </text>
+    </g>
+  </svg>
+</figure>

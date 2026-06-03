@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#e8f0ec"/>
+  <rect x="0" y="0" width="1200" height="8" fill="#1f6a52"/>
+  <circle cx="900" cy="315" r="240" fill="#cfe1d6" opacity="0.6"/>
+  <circle cx="900" cy="315" r="180" fill="none" stroke="#1f6a52" stroke-width="2" opacity="0.4"/>
+  <text x="80" y="240" font-family="Georgia, serif" font-size="72" font-weight="bold" fill="#1a1d23">Typ-2-Diabetes</text>
+  <text x="80" y="320" font-family="Georgia, serif" font-size="60" fill="#1f6a52">verstehen.</text>
+  <text x="80" y="400" font-family="Inter, sans-serif" font-size="28" fill="#4b5260">typ2-kompass.de</text>
+</svg>

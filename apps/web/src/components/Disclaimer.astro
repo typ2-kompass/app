@@ -1,0 +1,32 @@
+---
+type Props = {
+  variant?: 'default' | 'compact';
+};
+const { variant = 'default' } = Astro.props;
+---
+
+{
+  variant === 'compact' ? (
+    <aside class="article__disclaimer" role="note" aria-label="Medizinischer Hinweis">
+      <p>
+        <strong>Wichtig:</strong> Dieser Beitrag ersetzt keine ärztliche Beratung. Besprechen
+        Sie Therapie und Lebensstil-Änderungen mit Ihrer Diabetologin oder Ihrem Hausarzt.
+      </p>
+    </aside>
+  ) : (
+    <aside class="article__disclaimer" role="note" aria-label="Medizinischer Hinweis">
+      <p>
+        <strong>Wichtig — medizinischer Disclaimer:</strong> Dieser Beitrag ersetzt keine
+        ärztliche Beratung. Er erklärt Grundlagen und nennt Therapieprinzipien. Konkrete
+        Diagnose, Therapie und Medikation gehören in die Hand Ihrer Diabetologin oder Ihres
+        Hausarztes.
+      </p>
+      <p>
+        Im akuten Notfall — etwa bei Bewusstseinsstörung, schwerer Unterzuckerung oder
+        Anzeichen einer Ketoazidose (Übelkeit, tiefes Atmen, Acetongeruch) — rufen Sie die
+        <strong>112</strong>. Für nicht-akute medizinische Fragen erreichen Sie den
+        ärztlichen Bereitschaftsdienst unter <strong>116 117</strong>.
+      </p>
+    </aside>
+  )
+}

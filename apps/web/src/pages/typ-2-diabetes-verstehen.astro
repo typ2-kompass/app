@@ -1,0 +1,27 @@
+---
+import { getCollection, render } from 'astro:content';
+import ArticleLayout from '~/layouts/ArticleLayout.astro';
+
+const articles = await getCollection('articles');
+const article = articles.find((a) => a.data.slug === '/typ-2-diabetes-verstehen');
+if (!article) throw new Error(`Article not found. Available: ${articles.map(a => a.id).join(', ')}`);
+
+const { Content } = await render(article);
+const { data } = article;
+---
+
+<ArticleLayout
+  title={data.title}
+  metaTitle={data.metaTitle}
+  metaDescription={data.metaDescription}
+  slug={data.slug}
+  datePublished={data.datePublished}
+  dateModified={data.dateModified}
+  nextReviewDate={data.nextReviewDate}
+  heroAlt={data.heroAlt}
+  schemaType={data.schemaType}
+  faq={data.faq}
+  medicalConditions={data.medicalConditions}
+>
+  <Content />
+</ArticleLayout>

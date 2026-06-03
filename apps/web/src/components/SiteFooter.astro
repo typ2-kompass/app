@@ -1,0 +1,22 @@
+---
+import { SITE } from '~/lib/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__row">
+      <div>&copy; {year} {SITE.name}</div>
+      <nav class="site-footer__links" aria-label="Rechtliche Hinweise">
+        <a href="/impressum">Impressum</a>
+        <a href="/datenschutz">Datenschutz</a>
+        <a href="/ueber-uns">Über uns</a>
+      </nav>
+    </div>
+    <p class="site-footer__disclaimer">
+      Typ2-Kompass liefert Bildungs- und Reflexionsinhalte. Wir ersetzen keine ärztliche
+      Beratung. Im Notfall wählen Sie die <strong>112</strong>; für nicht-akute medizinische
+      Fragen erreichen Sie den ärztlichen Bereitschaftsdienst unter <strong>116 117</strong>.
+    </p>
+  </div>
+</footer>

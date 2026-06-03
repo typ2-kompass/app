@@ -1,0 +1,86 @@
+---
+type Props = {
+  caption?: string;
+};
+const {
+  caption = 'Tellermodell: ein halber Teller Gemüse, ein Viertel Eiweiß, ein Viertel komplexe Kohlenhydrate.',
+} = Astro.props;
+---
+
+<figure class="plate" role="figure" aria-label={caption}>
+  <svg
+    viewBox="0 0 320 320"
+    role="img"
+    aria-label="Tellergrafik mit halbem Anteil Gemüse, je einem Viertel Eiweiß und Kohlenhydraten."
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <radialGradient id="plate-shade" cx="50%" cy="40%" r="65%">
+        <stop offset="0%" stop-color="#ffffff" />
+        <stop offset="100%" stop-color="#f1ece1" />
+      </radialGradient>
+    </defs>
+    <!-- plate rim -->
+    <circle cx="160" cy="160" r="148" fill="url(#plate-shade)" stroke="#cdc6b6" stroke-width="2" />
+    <circle cx="160" cy="160" r="124" fill="#ffffff" stroke="#e6e1d6" stroke-width="1.5" />
+
+    <!-- half: vegetables (green) -->
+    <path
+      d="M160 36 A124 124 0 0 1 160 284 Z"
+      fill="#bcd9b4"
+    />
+    <!-- quarter top-left: protein (sand) -->
+    <path
+      d="M160 36 A124 124 0 0 0 36 160 L160 160 Z"
+      fill="#f3d9a4"
+    />
+    <!-- quarter bottom-left: carbs (warm beige) -->
+    <path
+      d="M36 160 A124 124 0 0 0 160 284 L160 160 Z"
+      fill="#e3c193"
+    />
+
+    <!-- divider strokes -->
+    <line x1="36" y1="160" x2="284" y2="160" stroke="#ffffff" stroke-width="3" />
+    <line x1="160" y1="36" x2="160" y2="284" stroke="#ffffff" stroke-width="3" />
+
+    <!-- labels -->
+    <text
+      x="220"
+      y="160"
+      text-anchor="middle"
+      font-family="Inter, sans-serif"
+      font-size="14"
+      font-weight="600"
+      fill="#1f3c2e"
+    >
+      <tspan x="220" dy="-6">½ Teller</tspan>
+      <tspan x="220" dy="18">Gemüse</tspan>
+    </text>
+    <text
+      x="100"
+      y="105"
+      text-anchor="middle"
+      font-family="Inter, sans-serif"
+      font-size="13"
+      font-weight="600"
+      fill="#5b4316"
+    >
+      <tspan x="100" dy="-6">¼ Eiweiß</tspan>
+      <tspan x="100" dy="16">Fisch · Hülsen · Geflügel</tspan>
+    </text>
+    <text
+      x="100"
+      y="215"
+      text-anchor="middle"
+      font-family="Inter, sans-serif"
+      font-size="13"
+      font-weight="600"
+      fill="#5b4316"
+    >
+      <tspan x="100" dy="-6">¼ Kohlenhydrate</tspan>
+      <tspan x="100" dy="16">Vollkorn · Kartoffeln</tspan>
+    </text>
+  </svg>
+  <figcaption>{caption}</figcaption>
+</figure>

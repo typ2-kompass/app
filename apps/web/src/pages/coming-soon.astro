@@ -1,0 +1,39 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+
+const thema = Astro.url.searchParams.get('thema') ?? '';
+const labelMap: Record<string, string> = {
+  'hba1c-wert': 'HbA1c-Wert verstehen',
+  'praediabetes': 'Prädiabetes erkennen',
+  'ernaehrung-bei-typ-2-diabetes': 'Ernährung bei Typ-2-Diabetes',
+  'bewegung-bei-diabetes': 'Bewegung bei Diabetes',
+  'blutzucker-senken': 'Blutzucker senken — Evidenz statt Mythen',
+  'metformin': 'Metformin — was Patient:innen wissen sollten',
+  'diabetes-remission': 'Diabetes-Remission — was die Studien wirklich sagen',
+  'diabetes-ernaehrungsplan': 'Diabetes-Ernährungsplan — Starthilfe 4 Wochen',
+};
+const label = thema && labelMap[thema] ? labelMap[thema] : 'Dieser Artikel';
+---
+
+<BaseLayout
+  title="Bald verfügbar — Typ2-Kompass"
+  description="Dieser Artikel ist in Arbeit und wird bald veröffentlicht."
+  noindex={true}
+>
+  <div class="coming-soon">
+    <p style="color: var(--color-brand); font-size: .9rem; font-weight: 600; text-transform: uppercase; letter-spacing: .07em; margin-bottom: .5rem;">
+      In Kürze verfügbar
+    </p>
+    <h1>{label}</h1>
+    <p>
+      Dieser Artikel ist derzeit in Arbeit. Typ2-Kompass veröffentlicht Inhalte nach einem
+      redaktionellen Qualitätsprozess — evidenzbasiert und lektoriell geprüft.
+    </p>
+    <p>
+      <a href="/typ-2-diabetes-verstehen">← Zurück zum Pillar-Artikel: Typ-2-Diabetes verstehen</a>
+    </p>
+    <p>
+      <a href="/">Zur Startseite</a>
+    </p>
+  </div>
+</BaseLayout>

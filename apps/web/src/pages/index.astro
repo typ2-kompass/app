@@ -1,0 +1,27 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { SITE } from '~/lib/site';
+---
+
+<BaseLayout
+  title={`${SITE.name} — Verständliche Begleitung bei Typ-2-Diabetes`}
+  description={SITE.description}
+>
+  <section style="max-width: 56rem; margin: 0 auto; padding: 3rem 1.25rem 5rem;">
+    <p style="text-transform: uppercase; letter-spacing: .08em; font-size: .85rem; font-weight: 600; color: var(--color-brand); margin-bottom: .5rem;">
+      Typ2-Kompass
+    </p>
+    <h1 style="font-family: var(--font-serif); font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; letter-spacing: -.01em; margin: 0 0 1.25rem;">
+      Orientierung bei Typ-2-Diabetes.<br />Verständlich. Evidenzbasiert.
+    </h1>
+    <p style="font-size: 1.15rem; color: var(--color-ink-muted); max-width: 46ch; margin: 0 0 2rem; line-height: 1.6;">
+      {SITE.description}
+    </p>
+    <a
+      href="/typ-2-diabetes-verstehen"
+      style="display: inline-block; background: var(--color-brand); color: #fff; text-decoration: none; padding: .75rem 1.5rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 1rem;"
+    >
+      Zum Ratgeber: Typ-2-Diabetes verstehen →
+    </a>
+  </section>
+</BaseLayout>
