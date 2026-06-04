@@ -19,6 +19,10 @@ on:
         options:
           - remote
           - local
+  # Allow API-driven triggers from agents that can push but cannot
+  # call /actions/workflows/.../dispatches. Defaults to remote target.
+  repository_dispatch:
+    types: [migrate-d1]
 
 jobs:
   migrate:
@@ -56,7 +60,7 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          TARGET: ${{ inputs.target }}
+          TARGET: ${{ inputs.target || 'remote' }}
         run: |
           set -euo pipefail
           flag="--remote"
@@ -74,7 +78,7 @@ jobs:
           done
 
       - name: List tables (sanity check)
-        if: inputs.target == 'remote'
+        if: ${{ (inputs.target || 'remote') == 'remote' }}
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
