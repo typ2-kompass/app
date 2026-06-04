@@ -12,6 +12,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth(async () => {
   const env: AppEnv = await getAppEnv();
 
   return {
+    // Auth.js v5 only trusts the inbound Host header on Vercel by default.
+    // On Cloudflare Pages we are behind cf's edge but the request URL is the
+    // real public hostname, so opt-in explicitly. Without this every
+    // /api/auth/* route returns the "server configuration" 500.
+    trustHost: true,
     adapter: env.DB ? D1Adapter(env.DB) : undefined,
     secret: env.AUTH_SECRET,
     session: { strategy: "database" },
