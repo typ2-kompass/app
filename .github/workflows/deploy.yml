@@ -39,27 +39,21 @@ jobs:
         with:
           node-version: 20
           cache: npm
+          cache-dependency-path: apps/web/package-lock.json
 
-      - name: Install dependencies
+      - name: Install Astro app dependencies
+        working-directory: apps/web
         run: npm ci
 
-      - name: Build for Cloudflare Pages
+      - name: Build Astro site
+        working-directory: apps/web
         env:
-          # NEXT_PUBLIC_* values are inlined into the client bundle at build time,
-          # so they must come through GitHub Actions secrets (not Cloudflare Pages
-          # env vars, which only reach the runtime). The build step is a no-op for
-          # any missing key — SDKs are guarded and stay green without their config.
-          NEXT_PUBLIC_PLAUSIBLE_DOMAIN: ${{ secrets.NEXT_PUBLIC_PLAUSIBLE_DOMAIN }}
-          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
-          NEXT_PUBLIC_DEBUG_THROW_KEY: ${{ secrets.NEXT_PUBLIC_DEBUG_THROW_KEY }}
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-        run: npm run pages:build
+          PUBLIC_SITE_URL: https://mein.typ2-kompass.de
+        run: npm run build
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy .vercel/output/static --project-name=typ2-kompass-app --branch=main
+          command: pages deploy apps/web/dist --project-name=typ2-kompass-app --branch=main

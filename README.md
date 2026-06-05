@@ -1,8 +1,10 @@
 # Typ2-Kompass
 
-Next.js (TypeScript) + Tailwind CSS — App-Layer für [typ2-kompass.de](https://typ2-kompass.de).
+Web-Layer für [typ2-kompass.de](https://typ2-kompass.de).
 
 > **Wichtig:** Diese App läuft unter `mein.typ2-kompass.de`. Die Haupt-Domain `typ2-kompass.de` zeigt weiterhin auf die bestehende WordPress-Seite und wird durch dieses Repo **nicht** verändert.
+
+> **Stand 2026-06-05 (TYP-28):** Produktiv unter `mein.typ2-kompass.de` ist die **Astro-Static-Site** aus `apps/web/`. Der Next.js-Code im Repo-Root (Auth, Analytics, Content-Module) ist vorhanden, wird aktuell aber **nicht** deployed — dieser Teil wartet auf eine eigene Hosting-Entscheidung. Der untenstehende Abschnitt zur Next.js-Architektur beschreibt die noch nicht aktive App; relevant für den Live-Deploy ist `apps/web/` + `.github/workflows/deploy.yml`.
 
 ---
 
@@ -42,25 +44,29 @@ Die App wird über **Cloudflare Pages** ausgeliefert. Build & Deploy laufen aus 
 - **Default-URL:** `https://typ2-kompass-app.pages.dev` (immer verfügbar, von Cloudflare gestellt).
 - **Custom-Domain:** `https://mein.typ2-kompass.de` — wird gesetzt, sobald die Domain im Cloudflare-Account freigegeben und der CNAME bei checkdomain gepflegt ist.
 
-### Architektur
+### Architektur — aktiv (Astro)
 
 ```
 GitHub (push main)
         │
         ▼
-GitHub Actions  ──►  npm ci → npm run pages:build (@cloudflare/next-on-pages)
+GitHub Actions  ──►  cd apps/web → npm ci → PUBLIC_SITE_URL=… npm run build
         │
         ▼
-wrangler pages deploy  ──►  Cloudflare Pages (typ2-kompass-app)
+wrangler pages deploy apps/web/dist  ──►  Cloudflare Pages (typ2-kompass-app)
         │
         ▼
 typ2-kompass-app.pages.dev   +   mein.typ2-kompass.de (CNAME)
 ```
 
 - **Hosting:** Cloudflare Pages (Free-Tier), Account `info@typ2-kompass.de`.
-- **Adapter:** [`@cloudflare/next-on-pages`](https://github.com/cloudflare/next-on-pages) — App-Router auf Cloudflare Workers.
-- **Runtime:** `compatibility_flags = ["nodejs_compat"]`, `compatibility_date = "2025-05-01"` (siehe `wrangler.toml`).
+- **Stack:** Astro 6 Static Site (`apps/web/`), Output `apps/web/dist/`, kein Pages-Functions-Runtime.
+- **Build-Env:** `PUBLIC_SITE_URL=https://mein.typ2-kompass.de` (Workflow inline gesetzt — wird in Canonical/OG/Sitemap eingebrannt).
 - **DNS:** `mein.typ2-kompass.de` als CNAME auf `typ2-kompass-app.pages.dev` (verwaltet bei [checkdomain](https://www.checkdomain.de/)). Haupt-Domain `typ2-kompass.de` bleibt unverändert auf WordPress (185.3.235.231).
+
+### Architektur — geplant (Next.js App)
+
+Der Next.js-Stack im Repo-Root (Auth, Account, Module-Tracking, Sentry, Plausible-Proxy) ist build-ready, aber **nicht** im Deploy-Workflow aktiv. Vor einem zweiten Hosting-Setup (eigene Subdomain oder Pfad-Routing) muss geklärt werden, wo dieser Layer laufen soll. Der historische `next-on-pages`-Build-Pfad bleibt im Repo dokumentiert, weil er wieder relevant wird, sobald die Next.js-App ein Zuhause bekommt.
 
 ### Benötigte GitHub-Secrets (einmalig)
 
