@@ -2,9 +2,10 @@
 
 Web-Layer für [typ2-kompass.de](https://typ2-kompass.de).
 
-> **Wichtig:** Diese App läuft unter `mein.typ2-kompass.de`. Die Haupt-Domain `typ2-kompass.de` zeigt weiterhin auf die bestehende WordPress-Seite und wird durch dieses Repo **nicht** verändert.
-
-> **Stand 2026-06-05 (TYP-28):** Produktiv unter `mein.typ2-kompass.de` ist die **Astro-Static-Site** aus `apps/web/`. Der Next.js-Code im Repo-Root (Auth, Analytics, Content-Module) ist vorhanden, wird aktuell aber **nicht** deployed — dieser Teil wartet auf eine eigene Hosting-Entscheidung. Der untenstehende Abschnitt zur Next.js-Architektur beschreibt die noch nicht aktive App; relevant für den Live-Deploy ist `apps/web/` + `.github/workflows/deploy.yml`.
+> **Domain-Aufteilung (TYP-31):**
+> - `mein.typ2-kompass.de` → Astro-Marketingsite (`apps/web/`), deployed via `.github/workflows/deploy.yml`
+> - `app.typ2-kompass.de` → Next.js-App (Auth, Account, Module), deployed via `.github/workflows/deploy-app.yml`
+> - `typ2-kompass.de` → WordPress (unverändert, nicht Teil dieses Repos)
 
 ---
 
@@ -64,9 +65,30 @@ typ2-kompass-app.pages.dev   +   mein.typ2-kompass.de (CNAME)
 - **Build-Env:** `PUBLIC_SITE_URL=https://mein.typ2-kompass.de` (Workflow inline gesetzt — wird in Canonical/OG/Sitemap eingebrannt).
 - **DNS:** `mein.typ2-kompass.de` als CNAME auf `typ2-kompass-app.pages.dev` (verwaltet bei [checkdomain](https://www.checkdomain.de/)). Haupt-Domain `typ2-kompass.de` bleibt unverändert auf WordPress (185.3.235.231).
 
-### Architektur — geplant (Next.js App)
+### Architektur — Next.js App (`app.typ2-kompass.de`)
 
-Der Next.js-Stack im Repo-Root (Auth, Account, Module-Tracking, Sentry, Plausible-Proxy) ist build-ready, aber **nicht** im Deploy-Workflow aktiv. Vor einem zweiten Hosting-Setup (eigene Subdomain oder Pfad-Routing) muss geklärt werden, wo dieser Layer laufen soll. Der historische `next-on-pages`-Build-Pfad bleibt im Repo dokumentiert, weil er wieder relevant wird, sobald die Next.js-App ein Zuhause bekommt.
+```
+GitHub (push main, paths: app/**, lib/**)
+        │
+        ▼
+GitHub Actions  ──►  npm ci → AUTH_URL=https://app.typ2-kompass.de npm run build
+        │
+        ▼
+wrangler pages deploy .next  ──►  Cloudflare Pages (typ2-kompass-auth)
+        │
+        ▼
+typ2-kompass-auth.pages.dev   +   app.typ2-kompass.de (CNAME)
+```
+
+- **Pages-Projekt:** `typ2-kompass-auth` (separates Projekt — Astro-Deploy überschreibt die App nicht mehr)
+- **DNS:** `app.typ2-kompass.de` als CNAME auf `typ2-kompass-auth.pages.dev` (bei checkdomain setzen)
+- **Cloudflare Pages Custom Domain:** `app.typ2-kompass.de` im Dashboard unter Projekt `typ2-kompass-auth` hinzufügen
+
+**Einrichtungs-Checkliste (manuell):**
+1. Cloudflare Pages: Neues Projekt `typ2-kompass-auth` anlegen (oder Workflow einmal manuell triggern — Wrangler legt es an)
+2. checkdomain: CNAME `app` → `typ2-kompass-auth.pages.dev`
+3. Cloudflare Pages Dashboard: Custom Domain `app.typ2-kompass.de` zum Projekt hinzufügen
+4. Cloudflare Pages Env-Vars für `typ2-kompass-auth` setzen: `AUTH_SECRET`, `RESEND_API_KEY`, `EMAIL_FROM`, `AUTH_URL=https://app.typ2-kompass.de`
 
 ### Benötigte GitHub-Secrets (einmalig)
 

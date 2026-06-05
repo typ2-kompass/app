@@ -1,0 +1,64 @@
+name: Deploy App (Next.js)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app/**'
+      - 'lib/**'
+      - 'package*.json'
+      - 'next.config.*'
+      - 'wrangler.toml'
+      - '.github/workflows/deploy-app.yml'
+  workflow_dispatch: {}
+
+concurrency:
+  group: pages-deploy-app
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Cloudflare Pages (Next.js App)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - name: Verify required secrets
+        env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CF_ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          missing=0
+          if [ -z "$CF_TOKEN" ]; then
+            echo "::error::Missing secret CLOUDFLARE_API_TOKEN"
+            missing=1
+          fi
+          if [ -z "$CF_ACCOUNT" ]; then
+            echo "::error::Missing secret CLOUDFLARE_ACCOUNT_ID"
+            missing=1
+          fi
+          if [ "$missing" = "1" ]; then exit 1; fi
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js app
+        env:
+          AUTH_URL: https://app.typ2-kompass.de
+          NEXT_PUBLIC_PLAUSIBLE_DOMAIN: app.typ2-kompass.de
+        run: npm run build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy .next --project-name=typ2-kompass-auth --branch=main
