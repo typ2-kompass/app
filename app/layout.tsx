@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import Analytics from "@/components/Analytics";
+import { de } from "@/lib/i18n/messages/de";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -23,9 +25,21 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const year = new Date().getFullYear();
+
   return (
     <html lang="de">
-      <body>{children}</body>
+      <body>
+        {children}
+        <footer className="border-t border-slate-100 py-6 text-center text-xs text-slate-400">
+          <p className="mb-1">{de.footer.rights.replace("{year}", String(year))}</p>
+          <nav className="flex justify-center gap-4">
+            <Link href="/datenschutz" className="hover:underline">
+              {de.footer.privacy}
+            </Link>
+          </nav>
+        </footer>
+      </body>
       <Analytics />
     </html>
   );

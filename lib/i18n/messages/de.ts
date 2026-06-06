@@ -61,9 +61,26 @@ export const de = {
       emailLabel: "Angemeldet als",
       signOut: "Abmelden",
       signOutSubmitting: "Wird abgemeldet…",
+      exportHeading: "Daten exportieren",
+      exportBody:
+        "Lade eine Kopie deiner gespeicherten Daten als JSON-Datei herunter (E-Mail, Einwilligungs-Zeitstempel, abgeschlossene Module).",
+      exportButton: "Daten herunterladen",
       deleteHeading: "Konto löschen",
       deleteBody:
-        "Du kannst dein Konto und alle gespeicherten Daten jederzeit vollständig löschen. Die Funktion ist in Vorbereitung.",
+        "Du kannst dein Konto und alle gespeicherten Daten jederzeit vollständig und unwiderruflich löschen.",
+      deleteButton: "Konto löschen …",
+      deleteModalHeading: "Konto wirklich löschen?",
+      deleteModalBody:
+        "Alle gespeicherten Daten (E-Mail, Fortschritt, Einwilligungsnachweis) werden sofort und dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+      deleteConfirmLabel: "Bestätigung: Gib deine E-Mail-Adresse ein",
+      deleteConfirmPlaceholder: "name@beispiel.de",
+      deleteConfirmButton: "Konto endgültig löschen",
+      deleteConfirmSubmitting: "Wird gelöscht…",
+      deleteErrorMismatch:
+        "Die E-Mail-Adresse stimmt nicht überein. Bitte gib genau die Adresse ein, mit der du angemeldet bist.",
+      deleteErrorGeneric:
+        "Löschen fehlgeschlagen. Bitte versuche es in einem Moment erneut.",
+      deleteCancelButton: "Abbrechen",
       privacyNote:
         "Auf deinem Konto sind nur deine E-Mail-Adresse und dein Modul-Fortschritt gespeichert.",
     },
