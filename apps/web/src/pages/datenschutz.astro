@@ -1,0 +1,279 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { SITE } from '~/lib/site';
+
+const lastUpdated = '19. Juni 2026';
+---
+
+<BaseLayout
+  title={`Datenschutzerklärung — ${SITE.name}`}
+  description="Datenschutzerklärung von Typ2-Kompass: Informationen zur Verarbeitung Ihrer personenbezogenen Daten gemäß DSGVO."
+  canonical="/datenschutz"
+  noindex={true}
+>
+  <section style="max-width: 52rem; margin: 0 auto; padding: 3rem 1.25rem 5rem;">
+    <h1 style="font-family: var(--font-serif); font-size: clamp(1.75rem, 4vw, 2.5rem); line-height: 1.2; margin: 0 0 0.5rem;">
+      Datenschutzerklärung
+    </h1>
+    <p style="color: var(--color-ink-muted); font-size: 0.875rem; margin: 0 0 2.5rem;">
+      Stand: {lastUpdated}
+    </p>
+
+    <div class="prose">
+
+      <h2>1. Verantwortlicher</h2>
+      <p>
+        Verantwortlicher im Sinne der Datenschutz-Grundverordnung (DSGVO) ist:<br />
+        <strong>Typ2-Kompass</strong><br />
+        Kontakt: <a href="mailto:datenschutz@typ2-kompass.de">datenschutz@typ2-kompass.de</a>
+      </p>
+      <p>
+        Weitere Angaben entnehmen Sie bitte unserem <a href="/impressum">Impressum</a>.
+      </p>
+
+      <h2>2. Erhobene Daten und Verarbeitungszwecke</h2>
+
+      <h3>2.1 Besuch der Website</h3>
+      <p>
+        Beim Abrufen unserer Website erfasst unser Hosting-Anbieter (Cloudflare Pages) automatisch
+        technische Zugriffsdaten (IP-Adresse, Browsertyp, aufgerufene URL, Zeitstempel). Diese
+        werden ausschließlich zur Sicherstellung des Betriebs und zur Fehlerdiagnose verarbeitet
+        und nach spätestens 30 Tagen gelöscht.
+      </p>
+      <p>
+        Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse am störungsfreien
+        Betrieb).
+      </p>
+
+      <h3>2.2 Nutzerkonto und Authentifizierung</h3>
+      <p>
+        Bei der Registrierung und Anmeldung auf <strong>app.typ2-kompass.de</strong> verarbeiten
+        wir Ihre E-Mail-Adresse sowie ein verschlüsseltes Passwort oder einen Authentifizierungs-
+        Token (Magic Link). Diese Daten werden gespeichert, um Ihnen den Zugang zu Ihrem Konto
+        zu ermöglichen.
+      </p>
+      <p>
+        Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung).
+      </p>
+
+      <h3>2.3 Käufe und Zahlungsabwicklung</h3>
+      <p>
+        Wenn Sie ein Abonnement oder ein Produkt erwerben, verarbeiten wir folgende Bestelldaten:
+      </p>
+      <ul>
+        <li>E-Mail-Adresse</li>
+        <li>Name</li>
+        <li>Rechnungsadresse</li>
+        <li>Kaufbetrag und Währung</li>
+        <li>Zahlungsmethode (z. B. Kreditkarte, SEPA-Lastschrift)</li>
+      </ul>
+      <p>
+        Die eigentliche Zahlungsabwicklung erfolgt durch unseren Zahlungsdienstleister
+        <strong>Stripe Payments Europe, Ltd.</strong>, 1 Grand Canal Street Lower, Grand Canal
+        Dock, Dublin, D02 H210, Irland (nachfolgend „Stripe"). Stripe ist als
+        Auftragsverarbeiter gemäß Art. 28 DSGVO für uns tätig. Wir haben mit Stripe einen
+        Auftragsverarbeitungsvertrag (AVV) abgeschlossen. Soweit Daten in Drittländer übertragen
+        werden, erfolgt dies auf Grundlage der EU-Standardvertragsklauseln (SCC) gemäß
+        Art. 46 Abs. 2 lit. c DSGVO.
+      </p>
+      <p>
+        Weitere Informationen zum Datenschutz bei Stripe finden Sie unter
+        <a href="https://stripe.com/de/privacy" target="_blank" rel="noopener noreferrer">
+          stripe.com/de/privacy
+        </a>.
+      </p>
+      <p>
+        Rechtsgrundlage: Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung).
+      </p>
+
+      <h3>2.4 Aufbewahrung von Bestelldaten</h3>
+      <p>
+        Bestelldaten (Rechnungen, Zahlungsbelege) unterliegen gesetzlichen
+        Aufbewahrungspflichten. Wir speichern diese Daten für <strong>10 Jahre</strong> gemäß
+        § 147 Abs. 1 AO (Abgabenordnung). Nach Ablauf der Aufbewahrungsfrist werden die
+        Daten routinemäßig gelöscht.
+      </p>
+      <p>
+        Rechtsgrundlage: Art. 6 Abs. 1 lit. c DSGVO (Erfüllung einer rechtlichen Verpflichtung).
+      </p>
+
+      <h2>3. Cookies und lokaler Speicher</h2>
+      <p>
+        Wir setzen auf unserer Marketing-Website (<strong>typ2-kompass.de</strong>) keine
+        Tracking-Cookies ein. Im App-Bereich (<strong>app.typ2-kompass.de</strong>) werden
+        folgende Speichermechanismen verwendet:
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Name / Schlüssel</th>
+            <th>Art</th>
+            <th>Zweck</th>
+            <th>Lebensdauer</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>next-auth.session-token</code></td>
+            <td>Cookie (httpOnly)</td>
+            <td>Authentifizierungs-Session</td>
+            <td>30 Tage</td>
+          </tr>
+          <tr>
+            <td><code>next-auth.csrf-token</code></td>
+            <td>Cookie (httpOnly)</td>
+            <td>CSRF-Schutz</td>
+            <td>Session</td>
+          </tr>
+          <tr>
+            <td><code>next-auth.callback-url</code></td>
+            <td>Cookie</td>
+            <td>Weiterleitungs-URL nach Login</td>
+            <td>Session</td>
+          </tr>
+          <tr>
+            <td><code>__stripe_mid</code></td>
+            <td>Cookie</td>
+            <td>Stripe Betrugsschutz (Merchant ID)</td>
+            <td>1 Jahr</td>
+          </tr>
+          <tr>
+            <td><code>__stripe_sid</code></td>
+            <td>Cookie</td>
+            <td>Stripe Betrugsschutz (Session ID)</td>
+            <td>30 Minuten</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        Die Stripe-Cookies werden nur während des Bezahlvorgangs gesetzt und dienen
+        ausschließlich der Betrugsprävention. Sie sind technisch notwendig für die
+        Zahlungsabwicklung.
+      </p>
+      <p>
+        Rechtsgrundlage für Session-Cookies: Art. 6 Abs. 1 lit. b DSGVO.<br />
+        Rechtsgrundlage für Stripe-Cookies: Art. 6 Abs. 1 lit. b und lit. f DSGVO.
+      </p>
+
+      <h2>4. Auftragsverarbeiter (Übersicht)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Anbieter</th>
+            <th>Zweck</th>
+            <th>Sitz / Transferbasis</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cloudflare, Inc.</td>
+            <td>Hosting, CDN, DDoS-Schutz</td>
+            <td>USA / EU-Standardvertragsklauseln</td>
+          </tr>
+          <tr>
+            <td>Stripe Payments Europe, Ltd.</td>
+            <td>Zahlungsabwicklung</td>
+            <td>Irland (EU) / SCC für Drittlandtransfer</td>
+          </tr>
+          <tr>
+            <td>Neon Tech, Inc.</td>
+            <td>Datenbankhosting (PostgreSQL)</td>
+            <td>EU-Region / EU-Standardvertragsklauseln</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>5. Ihre Rechte</h2>
+      <p>Sie haben gegenüber uns folgende Rechte bezüglich Ihrer personenbezogenen Daten:</p>
+      <ul>
+        <li><strong>Auskunft</strong> (Art. 15 DSGVO)</li>
+        <li><strong>Berichtigung</strong> (Art. 16 DSGVO)</li>
+        <li><strong>Löschung</strong> (Art. 17 DSGVO)</li>
+        <li><strong>Einschränkung der Verarbeitung</strong> (Art. 18 DSGVO)</li>
+        <li><strong>Datenübertragbarkeit</strong> (Art. 20 DSGVO)</li>
+        <li><strong>Widerspruch</strong> (Art. 21 DSGVO)</li>
+      </ul>
+      <p>
+        Zur Ausübung Ihrer Rechte wenden Sie sich an:
+        <a href="mailto:datenschutz@typ2-kompass.de">datenschutz@typ2-kompass.de</a>
+      </p>
+      <p>
+        Sie haben außerdem das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu
+        beschweren. Die zuständige Behörde für uns ist der Bundesbeauftragte für den
+        Datenschutz und die Informationsfreiheit (BfDI).
+      </p>
+
+      <h2>6. Änderungen dieser Datenschutzerklärung</h2>
+      <p>
+        Wir behalten uns vor, diese Datenschutzerklärung anzupassen, wenn sich rechtliche
+        Anforderungen oder unsere Dienste ändern. Die jeweils aktuelle Version ist auf dieser
+        Seite mit Datumsangabe verfügbar.
+      </p>
+
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose h2 {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin: 2.5rem 0 0.75rem;
+    color: var(--color-ink);
+  }
+  .prose h3 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 1.75rem 0 0.5rem;
+    color: var(--color-ink);
+  }
+  .prose p {
+    line-height: 1.7;
+    color: var(--color-ink-muted);
+    margin: 0 0 1rem;
+  }
+  .prose ul {
+    margin: 0.5rem 0 1rem 1.5rem;
+    color: var(--color-ink-muted);
+    line-height: 1.7;
+  }
+  .prose li {
+    margin-bottom: 0.25rem;
+  }
+  .prose a {
+    color: var(--color-brand);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    margin: 1rem 0 1.5rem;
+    overflow-x: auto;
+    display: block;
+  }
+  .prose th {
+    background: var(--color-surface-raised, #f8f8f8);
+    font-weight: 600;
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--color-border, #e5e5e5);
+    color: var(--color-ink);
+  }
+  .prose td {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--color-border, #e5e5e5);
+    color: var(--color-ink-muted);
+    vertical-align: top;
+  }
+  .prose code {
+    font-size: 0.8em;
+    background: var(--color-surface-raised, #f3f3f3);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+  }
+</style>
