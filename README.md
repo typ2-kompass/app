@@ -195,8 +195,13 @@ Auth-Sessions, Nutzer und DSGVO-Consent werden in einer **Cloudflare D1**-Datenb
 npx wrangler d1 create typ2-kompass-db
 # → Ausgabe enthält die database_id, diese in wrangler.toml eintragen
 
-# 2. Schema anlegen:
+# 2. Schema anlegen (Migrationen in Reihenfolge):
 npx wrangler d1 execute typ2-kompass-db --file=drizzle/0000_init.sql
+npx wrangler d1 execute typ2-kompass-db --file=drizzle/0001_module_progress.sql
+npx wrangler d1 execute typ2-kompass-db --file=drizzle/0002_billing.sql
+
+# Für lokale Entwicklung (--local Flag):
+# npx wrangler d1 execute typ2-kompass-db --local --file=drizzle/0002_billing.sql
 
 # 3. D1-Binding in Cloudflare Pages einrichten:
 #    Dashboard → Workers & Pages → typ2-kompass-app
