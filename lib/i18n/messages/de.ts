@@ -67,6 +67,22 @@ export const de = {
       privacyNote:
         "Auf deinem Konto sind nur deine E-Mail-Adresse und dein Modul-Fortschritt gespeichert.",
     },
+    activation: {
+      errorHeading: "Aktivierung nicht möglich",
+      errorAlreadyUsed:
+        "Dieser Aktivierungs-Link wurde bereits eingelöst oder ist nicht mehr gültig. Pro Code ist eine einmalige Aktivierung möglich.",
+      errorGeneric:
+        "Die Aktivierung konnte nicht abgeschlossen werden. Bitte versuche es in einem Moment erneut.",
+      fallbackBody:
+        "Wenn du dein Konto schon einmal aktiviert hast, kannst du dich jederzeit per E-Mail-Anmeldelink wieder einloggen.",
+      loginCta: "Zur Anmeldung per E-Mail",
+    },
+    onboarding: {
+      heading: "Willkommen bei Typ2-Kompass",
+      body:
+        "Schön, dass du dabei bist. Wir richten gerade dein Konto ein — du findest alle Inhalte und deinen Fortschritt jederzeit in deinem Konto-Bereich.",
+      cta: "Weiter zu deinem Konto",
+    },
   },
   modulePage: {
     backToOverview: "Zurück zur Übersicht",
