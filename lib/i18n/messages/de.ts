@@ -78,6 +78,26 @@ export const de = {
         "Der Link ist nicht mehr gültig — das passiert, wenn er bereits genutzt wurde oder abgelaufen ist. Du kannst dir jederzeit einen neuen Anmeldelink per E-Mail zusenden lassen.",
       loginCta: "Neuen Anmeldelink anfordern",
     },
+    resend: {
+      heading: "Aktivierungs-E-Mail erneut senden",
+      subheading:
+        "Gib die E-Mail-Adresse ein, mit der du deinen Kauf abgeschlossen hast. Wir schicken dir deinen Aktivierungs-Link erneut zu.",
+      emailLabel: "E-Mail-Adresse",
+      emailPlaceholder: "name@beispiel.de",
+      submit: "Aktivierungs-Link erneut senden",
+      submitting: "Wird gesendet…",
+      successHeading: "E-Mail unterwegs",
+      successBody:
+        "Falls deine E-Mail-Adresse in unserem System hinterlegt ist, hast du in wenigen Minuten eine neue E-Mail mit deinem Aktivierungs-Link erhalten. Bitte prüfe auch deinen Spam-Ordner.",
+      errorInvalid: "Bitte gib eine gültige E-Mail-Adresse ein.",
+      errorRateLimitMinute:
+        "Du hast gerade erst eine E-Mail angefordert. Bitte warte eine Minute und versuche es erneut.",
+      errorRateLimitDay:
+        "Du hast heute bereits mehrere Aktivierungs-E-Mails angefordert. Bitte versuche es morgen wieder oder wende dich an unseren Support.",
+      errorGeneric:
+        "Es ist ein Fehler aufgetreten. Bitte versuche es in einem Moment erneut.",
+      backToLogin: "Zur Anmeldung",
+    },
     // CLINICAL-REVIEWED-2026-06-20
     onboarding: {
       heading: "Willkommen bei Typ2-Kompass",
