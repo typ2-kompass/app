@@ -67,6 +67,7 @@ export const de = {
       privacyNote:
         "Auf deinem Konto sind nur deine E-Mail-Adresse und dein Modul-Fortschritt gespeichert.",
     },
+    // CLINICAL-REVIEWED-2026-06-20
     activation: {
       errorHeading: "Aktivierung nicht möglich",
       errorAlreadyUsed:
@@ -74,13 +75,16 @@ export const de = {
       errorGeneric:
         "Die Aktivierung konnte nicht abgeschlossen werden. Bitte versuche es in einem Moment erneut.",
       fallbackBody:
-        "Wenn du dein Konto schon einmal aktiviert hast, kannst du dich jederzeit per E-Mail-Anmeldelink wieder einloggen.",
-      loginCta: "Zur Anmeldung per E-Mail",
+        "Der Link ist nicht mehr gültig — das passiert, wenn er bereits genutzt wurde oder abgelaufen ist. Du kannst dir jederzeit einen neuen Anmeldelink per E-Mail zusenden lassen.",
+      loginCta: "Neuen Anmeldelink anfordern",
     },
+    // CLINICAL-REVIEWED-2026-06-20
     onboarding: {
       heading: "Willkommen bei Typ2-Kompass",
       body:
         "Schön, dass du dabei bist. Wir richten gerade dein Konto ein — du findest alle Inhalte und deinen Fortschritt jederzeit in deinem Konto-Bereich.",
+      disclaimer:
+        "Typ2-Kompass ersetzt keine ärztliche Beratung. Die Inhalte dienen der Information und Reflexion, nicht der medizinischen Diagnose oder Therapie.",
       cta: "Weiter zu deinem Konto",
     },
   },
