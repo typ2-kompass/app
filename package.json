@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "pages:build": "npx @cloudflare/next-on-pages",
     "pages:preview": "npm run pages:build && wrangler pages dev .vercel/output/static",
-    "pages:deploy": "npm run pages:build && wrangler pages deploy .vercel/output/static"
+    "pages:deploy": "npm run pages:build && wrangler pages deploy .vercel/output/static",
+    "test": "vitest run"
   },
   "dependencies": {
     "@auth/d1-adapter": "^1.11.2",
@@ -42,6 +43,7 @@
     "tailwindcss": "3.4.17",
     "typescript": "5.7.3",
     "vercel": "^47.0.4",
+    "vitest": "^4.1.9",
     "wrangler": "^4.95.0"
   },
   "engines": {
