@@ -99,6 +99,20 @@ export const de = {
       backToLogin: "Zur Anmeldung",
     },
     // CLINICAL-REVIEWED-2026-06-20
+    refund: {
+      // Grace-period banner shown on /account and on module pages while
+      // entitlements.revokedAt is still in the future. {date} is replaced
+      // with a formatted German date (DD.MM.YYYY).
+      graceHeading: "Dein Zugang endet bald",
+      graceBody:
+        "Dein Zugang endet am {date} wegen einer Rückerstattung. Falls das nicht beabsichtigt ist, melde dich bitte bei {support}.",
+      supportEmail: "support@typ2-kompass.de",
+      // Locked-out page rendered for modules after the grace period.
+      expiredHeading: "Dein Zugang ist beendet",
+      expiredBody:
+        "Deine Bestellung wurde zurückerstattet, daher ist der Zugang zu den Inhalten nicht mehr verfügbar. Dein Konto und dein Anmeldelink bleiben erhalten. Bei Fragen erreichst du uns unter {support}.",
+      expiredBackToAccount: "Zurück zum Konto",
+    },
     onboarding: {
       heading: "Willkommen bei Typ2-Kompass",
       body:

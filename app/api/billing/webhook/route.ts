@@ -370,6 +370,17 @@ async function handleChargeRefunded(params: {
   )
     .bind(graceUntilIso, order.id)
     .run();
+
+  // Entitlements for this order get the same grace cutoff. The app reads
+  // entitlements.revokedAt to (a) render the grace-period banner and
+  // (b) block module access once the cutoff passes.
+  await env.DB.prepare(
+    `UPDATE entitlements
+        SET revokedAt = ?
+      WHERE orderId = ? AND revokedAt IS NULL`,
+  )
+    .bind(graceUntilIso, order.id)
+    .run();
 }
 
 // ─── payment_intent.payment_failed ──────────────────────────────────────────

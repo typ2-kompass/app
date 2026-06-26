@@ -5,10 +5,17 @@ import Link from "next/link";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import ModuleProgress from "@/components/ModuleProgress";
+import RefundGraceBanner from "@/components/RefundGraceBanner";
 import { loadModule, listModuleSlugs } from "@/lib/modules";
 import { de } from "@/lib/i18n/messages/de";
+import { auth } from "@/lib/auth";
+import { getAppEnv } from "@/lib/env";
+import { resolveEntitlement } from "@/lib/billing/entitlement";
 
-export const dynamic = "force-static";
+// We do per-request rendering so we can apply the refund grace/expired
+// gating below. Non-logged-in visitors still hit the same render path but
+// skip the DB lookup, so cost is minimal.
+export const runtime = "edge";
 export const dynamicParams = false;
 
 export async function generateStaticParams() {
@@ -46,12 +53,68 @@ export default async function ModulePage({
   if (!mod) notFound();
 
   const t = de.modulePage;
+  const tRefund = de.auth.refund;
+
+  // Refund-gating: only logged-in users with an entitlement row are affected.
+  // Anonymous visitors and users who never bought see the module as before.
+  let graceUntil: string | null = null;
+  let entitlementExpired = false;
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (userId) {
+    const env = await getAppEnv();
+    if (env.DB) {
+      const ent = await resolveEntitlement(env.DB, userId);
+      if (ent.status === "grace" && ent.revokedAt) {
+        graceUntil = ent.revokedAt;
+      } else if (ent.status === "expired") {
+        entitlementExpired = true;
+      }
+    }
+  }
+
+  if (entitlementExpired) {
+    return (
+      <>
+        <Nav />
+        <article className="mx-auto max-w-2xl px-6 pb-16 pt-10 sm:pt-16">
+          <Link
+            href="/account"
+            className="mb-6 inline-flex items-center gap-1 text-sm font-medium text-kompass-accent hover:text-kompass-accentDark"
+          >
+            <span aria-hidden>←</span>
+            {tRefund.expiredBackToAccount}
+          </Link>
+          <div
+            role="status"
+            data-testid="refund-expired-page"
+            className="rounded-2xl border border-slate-200 bg-white px-6 py-8 shadow-sm"
+          >
+            <h1 className="mb-3 text-2xl font-bold text-kompass-ink">
+              {tRefund.expiredHeading}
+            </h1>
+            <p
+              className="text-base leading-relaxed text-slate-700"
+              dangerouslySetInnerHTML={{
+                __html: tRefund.expiredBody.replace(
+                  "{support}",
+                  `<a class="font-semibold underline" href="mailto:${tRefund.supportEmail}">${tRefund.supportEmail}</a>`,
+                ),
+              }}
+            />
+          </div>
+        </article>
+        <Footer />
+      </>
+    );
+  }
 
   return (
     <>
       <Nav />
 
       <article className="mx-auto max-w-2xl px-6 pb-16 pt-10 sm:pt-16">
+        {graceUntil && <RefundGraceBanner revokedAt={graceUntil} />}
         <Link
           href="/"
           className="mb-6 inline-flex items-center gap-1 text-sm font-medium text-kompass-accent hover:text-kompass-accentDark"
