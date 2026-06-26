@@ -53,7 +53,9 @@ jobs:
       - name: Build Next.js app
         env:
           AUTH_URL: https://app.typ2-kompass.de
-          NEXT_PUBLIC_PLAUSIBLE_DOMAIN: app.typ2-kompass.de
+          # Apex domain so events share a Plausible site with the marketing
+          # site's sales_page_view event and the funnel resolves end-to-end.
+          NEXT_PUBLIC_PLAUSIBLE_DOMAIN: typ2-kompass.de
         run: npm run build
 
       - name: Deploy to Cloudflare Pages

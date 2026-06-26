@@ -9,6 +9,7 @@ const UPSTREAM = "https://plausible.io/api/event";
 
 export type ServerAnalyticsEventName =
   | "activation_clicked"
+  | "activation_email_sent"
   | "app_first_login"
   | "checkout_started"
   | "checkout_completed"

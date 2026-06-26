@@ -1,0 +1,36 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+
+// Funnel-entry sales page. Pricing content lands here as part of the Stripe-
+// commerce rollout (TYP-35 family). For now the page exists as a real,
+// stable URL so the Plausible `sales_page_view` event fires the moment a
+// visitor reaches the funnel entry — even before the pricing copy is final.
+// noindex until pricing is published so we don't surface a placeholder in
+// search.
+---
+
+<BaseLayout
+  title="Preise — Typ2-Kompass"
+  description="Module und Preise für Typ2-Kompass. Bald verfügbar."
+  noindex={true}
+  salesPage={true}
+>
+  <section style="max-width: 56rem; margin: 0 auto; padding: 3rem 1.25rem 5rem;">
+    <p style="text-transform: uppercase; letter-spacing: .08em; font-size: .85rem; font-weight: 600; color: var(--color-brand); margin-bottom: .5rem;">
+      Preise
+    </p>
+    <h1 style="font-family: var(--font-serif); font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; letter-spacing: -.01em; margin: 0 0 1.25rem;">
+      Bald verfügbar
+    </h1>
+    <p style="font-size: 1.15rem; color: var(--color-ink-muted); max-width: 46ch; margin: 0 0 2rem; line-height: 1.6;">
+      Die Module von Typ2-Kompass starten in Kürze. Bis dahin lohnt sich der
+      Pillar-Artikel zum Verständnis der Erkrankung.
+    </p>
+    <a
+      href="/typ-2-diabetes-verstehen"
+      style="display: inline-block; background: var(--color-brand); color: #fff; text-decoration: none; padding: .75rem 1.5rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 1rem;"
+    >
+      Zum Ratgeber: Typ-2-Diabetes verstehen →
+    </a>
+  </section>
+</BaseLayout>

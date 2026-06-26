@@ -1,0 +1,33 @@
+---
+// Plausible analytics for the marketing/sales site (mein.typ2-kompass.de).
+// Loaded once via BaseLayout. If PUBLIC_PLAUSIBLE_DOMAIN is unset (e.g. local
+// dev, preview deploys without the env var), the component renders nothing
+// and analytics goes dark — the rest of the site keeps working.
+//
+// The Next.js app proxies the Plausible script and event API through its own
+// origin to dodge content blockers; on this static Astro deploy we accept the
+// direct script for now because the marketing site has no equivalent edge
+// runtime and content-blocker drop is acceptable for funnel measurement.
+//
+// `window.plausible` queue stub mirrors Plausible's documented pattern so that
+// custom events fired during page load are not silently lost when the deferred
+// script is still in flight.
+
+const domain = import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN;
+---
+
+{domain && (
+  <>
+    <script
+      is:inline
+      defer
+      data-domain={domain}
+      src="https://plausible.io/js/script.js"
+    />
+    <script is:inline>
+      window.plausible = window.plausible || function () {
+        (window.plausible.q = window.plausible.q || []).push(arguments);
+      };
+    </script>
+  </>
+)}

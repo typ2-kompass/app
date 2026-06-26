@@ -49,6 +49,9 @@ jobs:
         working-directory: apps/web
         env:
           PUBLIC_SITE_URL: https://mein.typ2-kompass.de
+          # Apex Plausible site so the sales_page_view event lands in the same
+          # funnel as the Next.js app's checkout/activation events.
+          PUBLIC_PLAUSIBLE_DOMAIN: typ2-kompass.de
         run: npm run build
 
       - name: Deploy to Cloudflare Pages

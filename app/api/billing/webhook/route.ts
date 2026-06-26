@@ -260,6 +260,11 @@ async function handleCheckoutCompleted(params: {
 
   // --- Send activation mail(s) ---------------------------------------------
   const origin = baseUrl.replace(/\/$/, "");
+  const mailProps = {
+    sku: productSku,
+    quantity: String(quantity),
+    is_b2b: isB2B,
+  };
   if (isB2B) {
     const adminUrl = `${origin}/seats/${orderRow.orderToken ?? orderToken}`;
     const { subject, html, text } = renderActivationEmail({
@@ -274,6 +279,12 @@ async function handleCheckoutCompleted(params: {
       subject,
       html,
       text,
+    });
+    await trackServerEvent({
+      name: "activation_email_sent",
+      url: `${origin}/api/billing/webhook`,
+      headers,
+      props: { ...mailProps, kind: "b2b_admin" },
     });
     // For B2B we mark codes as 'pending' (still need to be assigned by the
     // Verwalter) — do NOT mark as 'sent' yet.
@@ -300,6 +311,12 @@ async function handleCheckoutCompleted(params: {
     )
       .bind(nowIso, code)
       .run();
+    await trackServerEvent({
+      name: "activation_email_sent",
+      url: `${origin}/api/billing/webhook`,
+      headers,
+      props: { ...mailProps, kind: "b2c" },
+    });
   }
 
   // --- Plausible server event ----------------------------------------------

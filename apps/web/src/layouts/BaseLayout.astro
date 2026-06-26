@@ -2,6 +2,7 @@
 import '~/styles/global.css';
 import SiteHeader from '~/components/SiteHeader.astro';
 import SiteFooter from '~/components/SiteFooter.astro';
+import PlausibleScript from '~/components/PlausibleScript.astro';
 import { SITE, absoluteUrl } from '~/lib/site';
 
 type Props = {
@@ -12,6 +13,11 @@ type Props = {
   ogType?: 'website' | 'article';
   jsonLd?: object | object[];
   noindex?: boolean;
+  // Fires the Plausible `sales_page_view` custom event when the page mounts.
+  // Set on pages whose primary purpose is selling (pricing, checkout entry).
+  // Pure pageviews from non-sales pages still arrive as the default Plausible
+  // pageview event — this opt-in is only for the funnel-specific event.
+  salesPage?: boolean;
 };
 
 const {
@@ -22,6 +28,7 @@ const {
   ogType = 'website',
   jsonLd,
   noindex = false,
+  salesPage = false,
 } = Astro.props;
 
 const canonicalUrl = canonical ? absoluteUrl(canonical) : absoluteUrl(Astro.url.pathname);
@@ -71,6 +78,8 @@ const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
     ))}
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <PlausibleScript />
   </head>
   <body>
     <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
@@ -79,5 +88,15 @@ const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
       <slot />
     </main>
     <SiteFooter />
+    {salesPage && (
+      <script is:inline>
+        (function () {
+          try {
+            var p = window.plausible;
+            if (typeof p === "function") p("sales_page_view");
+          } catch (e) { /* analytics must never break the page */ }
+        })();
+      </script>
+    )}
   </body>
 </html>
