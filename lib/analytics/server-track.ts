@@ -9,7 +9,10 @@ const UPSTREAM = "https://plausible.io/api/event";
 
 export type ServerAnalyticsEventName =
   | "activation_clicked"
-  | "app_first_login";
+  | "app_first_login"
+  | "checkout_started"
+  | "checkout_completed"
+  | "payment_failed";
 
 export async function trackServerEvent(params: {
   name: ServerAnalyticsEventName;
