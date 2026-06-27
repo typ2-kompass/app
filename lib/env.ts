@@ -11,6 +11,7 @@ export interface AppEnv {
   STRIPE_WEBHOOK_SECRET?: string;
   STRIPE_PRICE_B2C?: string;
   STRIPE_PRICE_B2B_SEAT?: string;
+  STRIPE_PRICE_UPDATE_RENEWAL?: string;
   // Marketing/sales site origin — used as the default cancel_url and as the
   // referer when no explicit return path is provided.
   MARKETING_URL?: string;
@@ -40,6 +41,7 @@ export async function getAppEnv(): Promise<AppEnv> {
       STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
       STRIPE_PRICE_B2C: process.env.STRIPE_PRICE_B2C,
       STRIPE_PRICE_B2B_SEAT: process.env.STRIPE_PRICE_B2B_SEAT,
+      STRIPE_PRICE_UPDATE_RENEWAL: process.env.STRIPE_PRICE_UPDATE_RENEWAL,
       MARKETING_URL: process.env.MARKETING_URL,
     };
   }

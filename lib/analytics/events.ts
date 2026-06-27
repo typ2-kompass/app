@@ -15,7 +15,11 @@ export type AnalyticsEvent =
       name: "module_completed";
       props: { module_slug: string; duration_bucket: DurationBucket };
     }
-  | { name: "reflection_submitted"; props: { module_slug: string; prompt_slug: string } };
+  | { name: "reflection_submitted"; props: { module_slug: string; prompt_slug: string } }
+  | {
+      name: "checkin_submitted";
+      props: { mood: number; prompt_key: string; has_note: boolean; weekday: number };
+    };
 
 export type AnalyticsEventName = AnalyticsEvent["name"];
 

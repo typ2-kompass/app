@@ -10,3 +10,7 @@ pages_build_output_dir = ".vercel/output/static"
 binding = "DB"
 database_name = "typ2-kompass-db"
 database_id = "587212db-5e49-4f5c-8975-4498cb1a1bf8"
+
+# Monthly update-report cron: 1st of each month at 09:00 UTC.
+[triggers]
+crons = ["0 9 1 * *"]

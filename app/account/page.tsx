@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { de } from "@/lib/i18n/messages/de";
 import { getAppEnv } from "@/lib/env";
 import { resolveEntitlement } from "@/lib/billing/entitlement";
+import { getUserActivatedAt } from "@/lib/updates/changelog";
 import RefundGraceBanner from "@/components/RefundGraceBanner";
+import UpdateExpiryBanner from "@/components/UpdateExpiryBanner";
 import SignOutButton from "./SignOutButton";
+import { ExportButton, DeleteAccountFlow } from "./GdprActions";
 
 export const runtime = "edge";
 
@@ -20,9 +24,11 @@ export default async function AccountPage() {
   }
 
   const t = de.auth.account;
+  const email = session.user.email;
 
   let graceUntil: string | null = null;
   let entitlementExpired = false;
+  let activatedAt: string | null = null;
   const userId = session.user.id;
   if (userId) {
     const env = await getAppEnv();
@@ -33,6 +39,7 @@ export default async function AccountPage() {
       } else if (ent.status === "expired") {
         entitlementExpired = true;
       }
+      activatedAt = await getUserActivatedAt(env.DB, userId);
     }
   }
 
@@ -42,6 +49,7 @@ export default async function AccountPage() {
     <main className="flex min-h-screen items-center justify-center bg-kompass-mist px-4 py-12">
       <div className="w-full max-w-md space-y-6 rounded-2xl bg-white p-8 shadow-sm">
         {graceUntil && <RefundGraceBanner revokedAt={graceUntil} />}
+        {activatedAt && <UpdateExpiryBanner activatedAt={activatedAt} />}
         {entitlementExpired && (
           <div
             role="status"
@@ -74,7 +82,7 @@ export default async function AccountPage() {
             {t.emailLabel}
           </p>
           <p className="mt-1 break-all text-base font-medium text-slate-800">
-            {session!.user!.email}
+            {email}
           </p>
         </div>
 
@@ -82,11 +90,48 @@ export default async function AccountPage() {
 
         <p className="text-xs leading-relaxed text-slate-400">{t.privacyNote}</p>
 
+        {/* Update-Changelog */}
+        {activatedAt && (
+          <div className="border-t border-slate-100 pt-5">
+            <h2 className="mb-1 text-sm font-semibold text-slate-700">Updates &amp; Changelog</h2>
+            <p className="mb-3 text-xs leading-relaxed text-slate-500">
+              Alle inhaltlichen Updates seit deinem Kauf — mit fachlicher Prüfungsangabe.
+            </p>
+            <Link
+              href="/updates"
+              className="inline-block rounded-lg bg-kompass-ink px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
+            >
+              Was ist neu? →
+            </Link>
+          </div>
+        )}
+
+        {/* DSGVO Art. 15 — Datenauskunft */}
+        <div className="border-t border-slate-100 pt-5">
+          <h2 className="mb-1 text-sm font-semibold text-slate-700">
+            {t.exportHeading}
+          </h2>
+          <p className="mb-3 text-xs leading-relaxed text-slate-500">
+            {t.exportBody}
+          </p>
+          <ExportButton />
+        </div>
+
+        {/* DSGVO Art. 17 — Recht auf Löschung */}
         <div className="border-t border-slate-100 pt-5">
           <h2 className="mb-1 text-sm font-semibold text-slate-700">
             {t.deleteHeading}
           </h2>
-          <p className="text-xs leading-relaxed text-slate-500">{t.deleteBody}</p>
+          <p className="mb-3 text-xs leading-relaxed text-slate-500">
+            {t.deleteBody}
+          </p>
+          <DeleteAccountFlow email={email} />
+        </div>
+
+        <div className="border-t border-slate-100 pt-4 text-center">
+          <Link href="/datenschutz" className="text-xs text-slate-400 hover:underline">
+            {de.footer.privacy}
+          </Link>
         </div>
       </div>
     </main>
