@@ -1,0 +1,172 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+
+const tiers = [
+  { seats: '5–24 Sitze', price: '€ 49 / Sitz', note: 'Mindest-Order 5 Sitze' },
+  { seats: '25–99 Sitze', price: '€ 39 / Sitz', note: '' },
+  { seats: 'Ab 100 Sitze', price: '€ 29 / Sitz', note: 'Auf Anfrage' },
+];
+---
+
+<BaseLayout
+  title="Typ2-Kompass für Unternehmen — Betriebliche Gesundheitsförderung (BGF)"
+  description="Typ2-Kompass für Ihr Team: Staffelpreise ab 5 Sitzen. Keine Abo-Fallen, kein Self-Checkout — persönliche Beratung inklusive."
+>
+  <section style="max-width: 64rem; margin: 0 auto; padding: 4rem 1.25rem 2rem;">
+    <p style="text-transform: uppercase; letter-spacing: .08em; font-size: .85rem; font-weight: 600; color: var(--color-brand); margin: 0 0 .5rem;">
+      Für Unternehmen
+    </p>
+    <h1 style="font-family: var(--font-serif); font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.2; margin: 0 0 1.25rem;">
+      Typ2-Kompass für Ihr Team
+    </h1>
+    <p style="font-size: 1.1rem; color: var(--color-ink-muted); max-width: 52ch; line-height: 1.65; margin: 0 0 3rem;">
+      Betriebliche Gesundheitsförderung mit evidenzbasiertem Inhalt.
+      Mitarbeitende mit Typ&#8209;2&#8209;Diabetes erhalten strukturierte, fachlich geprüfte
+      Begleitung — einmalig, ohne Abo-Verpflichtung.
+    </p>
+
+    <!-- Staffelpreise -->
+    <h2 style="font-family: var(--font-serif); font-size: 1.6rem; margin: 0 0 1.25rem;">Staffelpreise</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); gap: 1rem; margin-bottom: 3rem;">
+      {tiers.map((t) => (
+        <div style="background: var(--color-surface); border-radius: var(--radius-md); box-shadow: var(--shadow-card); padding: 1.5rem;">
+          <p style="font-weight: 700; font-size: 1rem; margin: 0 0 .25rem;">{t.seats}</p>
+          <p style="font-family: var(--font-serif); font-size: 1.75rem; margin: 0 0 .25rem; color: var(--color-brand);">{t.price}</p>
+          {t.note && <p style="font-size: .85rem; color: var(--color-ink-soft); margin: 0;">{t.note}</p>}
+          <p style="font-size: .85rem; color: var(--color-ink-muted); margin: .5rem 0 0;">inkl. 19 % USt. · Einmalzahlung</p>
+        </div>
+      ))}
+    </div>
+
+    <div style="background: var(--color-brand-soft); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 3rem; max-width: 52ch;">
+      <p style="margin: 0; font-size: .95rem; color: var(--color-ink-muted);">
+        <strong>Aktivierungs-Mechanik:</strong> Nach Ihrer Bestellung erhalten Sie einen
+        Pool an Aktivierungs-Codes. Ihre Mitarbeitenden lösen diese selbst unter
+        <code>mein.typ2-kompass.de</code> ein — ohne dass Sie Nutzerdaten zentral
+        verwalten müssen.
+      </p>
+    </div>
+
+    <!-- Kontaktformular -->
+    <h2 style="font-family: var(--font-serif); font-size: 1.6rem; margin: 0 0 .75rem;">Anfrage stellen</h2>
+    <p style="color: var(--color-ink-muted); margin: 0 0 1.5rem; max-width: 48ch;">
+      Kein Self-Checkout. Wir melden uns persönlich mit einem Angebot.
+    </p>
+
+    <form
+      id="b2b-form"
+      style="max-width: 36rem; display: flex; flex-direction: column; gap: 1rem;"
+      onsubmit="handleB2BSubmit(event)"
+      novalidate
+    >
+      <div>
+        <label for="f-name" style="display:block; font-size:.9rem; font-weight:600; margin-bottom:.35rem;">
+          Ihr Name <span aria-hidden="true">*</span>
+        </label>
+        <input
+          id="f-name" name="name" type="text" required autocomplete="name"
+          style="width:100%; padding:.65rem .85rem; border: 1px solid var(--color-rule); border-radius:var(--radius-sm); font-size:1rem; font-family:var(--font-sans); background:var(--color-surface);"
+        />
+      </div>
+      <div>
+        <label for="f-company" style="display:block; font-size:.9rem; font-weight:600; margin-bottom:.35rem;">
+          Unternehmen <span aria-hidden="true">*</span>
+        </label>
+        <input
+          id="f-company" name="company" type="text" required autocomplete="organization"
+          style="width:100%; padding:.65rem .85rem; border: 1px solid var(--color-rule); border-radius:var(--radius-sm); font-size:1rem; font-family:var(--font-sans); background:var(--color-surface);"
+        />
+      </div>
+      <div>
+        <label for="f-email" style="display:block; font-size:.9rem; font-weight:600; margin-bottom:.35rem;">
+          Geschäftliche E-Mail <span aria-hidden="true">*</span>
+        </label>
+        <input
+          id="f-email" name="email" type="email" required autocomplete="email"
+          style="width:100%; padding:.65rem .85rem; border: 1px solid var(--color-rule); border-radius:var(--radius-sm); font-size:1rem; font-family:var(--font-sans); background:var(--color-surface);"
+        />
+      </div>
+      <div>
+        <label for="f-seats" style="display:block; font-size:.9rem; font-weight:600; margin-bottom:.35rem;">
+          Gewünschte Anzahl Sitze <span aria-hidden="true">*</span>
+        </label>
+        <select
+          id="f-seats" name="seats" required
+          style="width:100%; padding:.65rem .85rem; border: 1px solid var(--color-rule); border-radius:var(--radius-sm); font-size:1rem; font-family:var(--font-sans); background:var(--color-surface);"
+        >
+          <option value="">— bitte wählen —</option>
+          <option value="5-24">5–24 Sitze (€49 / Sitz)</option>
+          <option value="25-99">25–99 Sitze (€39 / Sitz)</option>
+          <option value="100+">100+ Sitze (€29 / Sitz, auf Anfrage)</option>
+        </select>
+      </div>
+      <div>
+        <label for="f-note" style="display:block; font-size:.9rem; font-weight:600; margin-bottom:.35rem;">
+          Anmerkungen (optional)
+        </label>
+        <textarea
+          id="f-note" name="note" rows="3"
+          style="width:100%; padding:.65rem .85rem; border: 1px solid var(--color-rule); border-radius:var(--radius-sm); font-size:1rem; font-family:var(--font-sans); background:var(--color-surface); resize:vertical;"
+        ></textarea>
+      </div>
+      <div>
+        <button
+          type="submit" id="b2b-submit"
+          style="background:var(--color-brand); color:#fff; border:none; cursor:pointer; padding:.85rem 2rem; border-radius:var(--radius-sm); font-weight:700; font-size:1rem; font-family:var(--font-sans);"
+        >
+          Anfrage senden
+        </button>
+      </div>
+      <p id="b2b-success" style="display:none; color:var(--color-brand); font-weight:600;">
+        Danke für Ihre Anfrage. Wir melden uns innerhalb von 2 Werktagen.
+      </p>
+      <p id="b2b-error" style="display:none; color:var(--color-warn);">
+        Leider ist etwas schiefgelaufen. Bitte schreiben Sie uns direkt an
+        <a href="mailto:hallo@typ2-kompass.de">hallo@typ2-kompass.de</a>.
+      </p>
+    </form>
+  </section>
+</BaseLayout>
+
+<script is:inline>
+  function handleB2BSubmit(e) {
+    e.preventDefault();
+    var form = document.getElementById("b2b-form");
+    var btn = document.getElementById("b2b-submit");
+    var successEl = document.getElementById("b2b-success");
+    var errorEl = document.getElementById("b2b-error");
+
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = "Wird gesendet…";
+
+    var data = Object.fromEntries(new FormData(form));
+
+    try {
+      if (typeof window.plausible === "function") {
+        window.plausible("cta_clicked", { props: { location: "b2b_form" } });
+      }
+    } catch (_) {}
+
+    fetch("/api/b2b-inquiry", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error();
+        form.reset();
+        successEl.style.display = "block";
+        btn.style.display = "none";
+      })
+      .catch(function () {
+        errorEl.style.display = "block";
+        btn.disabled = false;
+        btn.textContent = "Anfrage senden";
+      });
+  }
+</script>

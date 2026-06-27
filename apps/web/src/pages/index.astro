@@ -1,27 +1,657 @@
 ---
 import BaseLayout from '~/layouts/BaseLayout.astro';
-import { SITE } from '~/lib/site';
+import { SITE, absoluteUrl } from '~/lib/site';
+
+const productSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: 'Typ2-Kompass',
+  description:
+    'Verständliche, evidenzbasierte Inhalte und digitale Werkzeuge für Menschen mit Typ-2-Diabetes.',
+  url: absoluteUrl('/'),
+  offers: {
+    '@type': 'Offer',
+    price: '49.00',
+    priceCurrency: 'EUR',
+    availability: 'https://schema.org/InStock',
+    url: absoluteUrl('/'),
+    priceSpecification: {
+      '@type': 'PriceSpecification',
+      price: '49.00',
+      priceCurrency: 'EUR',
+      valueAddedTaxIncluded: true,
+    },
+  },
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Muss ich ein Abo abschließen?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Nein. Typ2-Kompass ist eine einmalige Zahlung von €49. Kein Abo, keine automatische Verlängerung.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Was passiert nach 12 Monaten?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Ihr Basis-Zugang bleibt lebenslang bestehen. Die aktiven Inhaltsaktualisierungen und die Reviewer-Garantie laufen nach 12 Monaten aus.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Ist Typ2-Kompass eine Medizinprodukt-App oder DiGA?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Nein. Typ2-Kompass ist ein Bildungs- und Reflexionswerkzeug. Es ersetzt keine ärztliche Beratung oder Behandlung.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Von wem werden die Inhalte geprüft?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Alle Inhalte durchlaufen unser Reviewer-Programm mit medizinisch fachkundigen Prüfern. Quellen stammen ausschließlich aus der Deutschen Diabetes Gesellschaft (DDG), der Nationalen Versorgungsleitlinie (NVL), dem Institut für Qualität und Wirtschaftlichkeit im Gesundheitswesen (IQWiG) und dem Robert Koch-Institut (RKI).',
+      },
+    },
+  ],
+};
 ---
 
 <BaseLayout
-  title={`${SITE.name} — Verständliche Begleitung bei Typ-2-Diabetes`}
-  description={SITE.description}
+  title="Typ2-Kompass — Einmal zahlen. 12 Monate aktive Updates. Lebenslanger Basis-Zugang."
+  description="Verständliche, evidenzbasierte Begleitung bei Typ-2-Diabetes. €49 einmalig — kein Abo. Inhaltlich geprüft. Quellen: DDG, NVL, IQWiG, RKI."
+  jsonLd={[productSchema, faqSchema]}
+  salesPage={true}
 >
-  <section style="max-width: 56rem; margin: 0 auto; padding: 3rem 1.25rem 5rem;">
-    <p style="text-transform: uppercase; letter-spacing: .08em; font-size: .85rem; font-weight: 600; color: var(--color-brand); margin-bottom: .5rem;">
-      Typ2-Kompass
-    </p>
-    <h1 style="font-family: var(--font-serif); font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.15; letter-spacing: -.01em; margin: 0 0 1.25rem;">
-      Orientierung bei Typ-2-Diabetes.<br />Verständlich. Evidenzbasiert.
-    </h1>
-    <p style="font-size: 1.15rem; color: var(--color-ink-muted); max-width: 46ch; margin: 0 0 2rem; line-height: 1.6;">
-      {SITE.description}
-    </p>
-    <a
-      href="/typ-2-diabetes-verstehen"
-      style="display: inline-block; background: var(--color-brand); color: #fff; text-decoration: none; padding: .75rem 1.5rem; border-radius: var(--radius-sm); font-weight: 600; font-size: 1rem;"
-    >
-      Zum Ratgeber: Typ-2-Diabetes verstehen →
-    </a>
+  <!-- ── Hero ───────────────────────────────────────────────────── -->
+  <section class="sp-hero">
+    <div class="sp-container">
+      <p class="sp-eyebrow">Typ2-Kompass</p>
+      <div class="sp-kein-abo-badge">Kein Abo</div>
+      <h1 class="sp-h1">
+        Orientierung bei Typ&#8209;2&#8209;Diabetes.<br />
+        Verständlich. Evidenzbasiert. Einmalig.
+      </h1>
+      <p class="sp-subhead">
+        Einmal zahlen — <strong>12 Monate aktive Updates</strong> + Reviewer&#8209;Garantie.
+        Ihr Basis&#8209;Zugang bleibt <strong>lebenslang</strong> bestehen.
+      </p>
+      <div class="sp-cta-group">
+        <button
+          id="cta-hero"
+          class="sp-btn-primary"
+          data-cta="hero"
+          onclick="handleKauf(this)"
+          type="button"
+        >
+          Jetzt zugreifen — €&thinsp;49 einmalig
+        </button>
+        <p class="sp-cta-sub">Einmalzahlung inkl. 19&thinsp;% USt. · Kein Abo. · Sofortiger Zugang.</p>
+      </div>
+    </div>
   </section>
+
+  <!-- ── Problem ────────────────────────────────────────────────── -->
+  <section class="sp-section sp-section--alt">
+    <div class="sp-container sp-prose">
+      <h2 class="sp-h2">Was Menschen mit Typ&#8209;2&#8209;Diabetes wirklich brauchen</h2>
+      <p>
+        Eine Diagnose Typ&#8209;2&#8209;Diabetes verändert viel: Ernährung, Bewegung, Medikamente,
+        Blutzuckerkontrolle — und dazu jede Menge widersprüchliche Ratschläge aus dem
+        Internet. Was fehlt, ist eine verlässliche, ruhige Stimme, die erklärt <em>warum</em>
+        etwas funktioniert — und was die Wissenschaft wirklich sagt.
+      </p>
+      <p>
+        Studien zeigen: Menschen, die ihre Erkrankung verstehen, treffen bessere
+        Entscheidungen im Alltag. Nicht weil sie Mediziner werden, sondern weil sie die
+        richtigen Fragen kennen — und einen Kompass haben, wenn es unübersichtlich wird.
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Lösung ─────────────────────────────────────────────────── -->
+  <section class="sp-section">
+    <div class="sp-container sp-prose">
+      <h2 class="sp-h2">Was Typ2-Kompass für Sie tut</h2>
+      <p>
+        Typ2-Kompass ist kein Abo-Dienst und keine Medizinprodukt-App. Es ist ein digitales
+        Bildungs- und Reflexionswerkzeug — entwickelt für Menschen, die ihre Diagnose ernst
+        nehmen und fundiert begleitet werden möchten.
+      </p>
+    </div>
+    <div class="sp-container">
+      <ul class="sp-feature-grid">
+        <li class="sp-feature-card">
+          <div class="sp-feature-icon" aria-hidden="true">📚</div>
+          <h3>Evidenzbasiertes Wissen</h3>
+          <p>
+            Alle Inhalte basieren auf Quellen der DDG, NVL, IQWiG und des RKI — keine
+            Influencer-Tipps, keine Werbung, keine Verweise auf ungeprüfte Produkte.
+          </p>
+        </li>
+        <li class="sp-feature-card">
+          <div class="sp-feature-icon" aria-hidden="true">🧭</div>
+          <h3>Reflexions-Companion</h3>
+          <p>
+            Geführte Werkzeuge helfen Ihnen, Muster in Ernährung, Bewegung und
+            Blutzucker zu erkennen — und das Gespräch mit Ihrem Arzt vorzubereiten.
+          </p>
+        </li>
+        <li class="sp-feature-card">
+          <div class="sp-feature-icon" aria-hidden="true">🔄</div>
+          <h3>Aktive Updates — 12 Monate</h3>
+          <p>
+            Neue Leitlinien, überarbeitete Module, aktuelle Forschungsergebnisse: Wir
+            halten Ihre Inhalte das erste Jahr lang auf dem neuesten Stand.
+          </p>
+        </li>
+        <li class="sp-feature-card">
+          <div class="sp-feature-icon" aria-hidden="true">🔍</div>
+          <h3>Fachlich geprüft</h3>
+          <p>
+            Unser Reviewer-Programm stellt sicher, dass jede Aussage fachlich korrekt
+            ist, bevor sie veröffentlicht wird. Keine Heilsversprechen, klare Grenzen.
+          </p>
+        </li>
+        <li class="sp-feature-card">
+          <div class="sp-feature-icon" aria-hidden="true">♾️</div>
+          <h3>Lebenslanger Basis-Zugang</h3>
+          <p>
+            Was Sie einmal erworben haben, bleibt Ihres — auch nach den 12 Monaten
+            aktiver Updates. Kein Abo, das Sie vergessen und plötzlich abbezahlen.
+          </p>
+        </li>
+        <li class="sp-feature-card">
+          <div class="sp-feature-icon" aria-hidden="true">🔒</div>
+          <h3>Datenschutz by Design</h3>
+          <p>
+            Keine Weitergabe Ihrer Daten, kein Tracking durch Dritte, kein
+            Werbenetwerk. Ihre Gesundheitsdaten gehören Ihnen.
+          </p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Vertrauensanker ────────────────────────────────────────── -->
+  <section class="sp-section sp-section--alt">
+    <div class="sp-container">
+      <h2 class="sp-h2" style="text-align:center; margin-bottom: 2rem;">
+        Warum Sie Typ2-Kompass vertrauen können
+      </h2>
+      <div class="sp-trust-grid">
+        <div class="sp-trust-item">
+          <div class="sp-trust-logo" aria-label="Deutsche Diabetes Gesellschaft">DDG</div>
+          <p>Deutsche Diabetes Gesellschaft</p>
+        </div>
+        <div class="sp-trust-item">
+          <div class="sp-trust-logo" aria-label="Nationale Versorgungsleitlinie">NVL</div>
+          <p>Nationale Versorgungsleitlinie</p>
+        </div>
+        <div class="sp-trust-item">
+          <div class="sp-trust-logo" aria-label="Institut für Qualität und Wirtschaftlichkeit im Gesundheitswesen">IQWiG</div>
+          <p>IQWiG</p>
+        </div>
+        <div class="sp-trust-item">
+          <div class="sp-trust-logo" aria-label="Robert Koch-Institut">RKI</div>
+          <p>Robert Koch-Institut</p>
+        </div>
+      </div>
+      <div class="sp-reviewer-note">
+        <p>
+          <strong>Reviewer-Programm:</strong> Alle Inhalte werden vor Veröffentlichung
+          von medizinisch fachkundigen Prüfern auf fachliche Korrektheit geprüft.
+          Typ2-Kompass macht keine Heilversprechen. Wir sprechen von
+          <em>Remission</em> wo die Studienlage das erlaubt — nicht von „Heilung".
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Pricing ────────────────────────────────────────────────── -->
+  <section class="sp-section" id="preis">
+    <div class="sp-container sp-pricing-wrap">
+      <h2 class="sp-h2" style="text-align:center;">Einmal zahlen. Fertig.</h2>
+      <div class="sp-pricing-card">
+        <div class="sp-pricing-badge">Kein Abo</div>
+        <div class="sp-pricing-amount">
+          <span class="sp-pricing-currency">€</span>49
+        </div>
+        <p class="sp-pricing-vat">inkl. 19&thinsp;% USt. · Einmalzahlung</p>
+        <ul class="sp-pricing-features">
+          <li>✓ 12 Monate aktive Inhaltsaktualisierungen</li>
+          <li>✓ Reviewer-Garantie für alle Inhalte</li>
+          <li>✓ Reflexions-Companion und Werkzeuge</li>
+          <li>✓ Lebenslanger Basis-Zugang nach den 12 Monaten</li>
+          <li>✓ Keine automatische Verlängerung, kein Abo</li>
+          <li>✓ Datenschutz by Design — keine Datenweitergabe</li>
+        </ul>
+        <button
+          id="cta-pricing"
+          class="sp-btn-primary sp-btn-full"
+          data-cta="pricing"
+          onclick="handleKauf(this)"
+          type="button"
+        >
+          Jetzt kaufen — €&thinsp;49 einmalig
+        </button>
+        <p class="sp-cta-sub" style="text-align:center; margin-top:.75rem;">
+          Sichere Zahlung via Stripe · Sofortiger Zugang nach Kauf
+        </p>
+        <p class="sp-pricing-b2b">
+          Für Unternehmen ab 5 Mitarbeitern:
+          <a href="/firmen">Firmenlösung anfragen →</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ───────────────────────────────────────────────────── -->
+  <section class="sp-section sp-section--alt" id="faq">
+    <div class="sp-container sp-prose">
+      <h2 class="sp-h2">Häufige Fragen</h2>
+      <dl class="sp-faq">
+        <div class="sp-faq-item">
+          <dt>Muss ich ein Abo abschließen?</dt>
+          <dd>
+            Nein. Typ2-Kompass ist eine einmalige Zahlung von €&thinsp;49 (inkl. USt.).
+            Es gibt keine automatische Verlängerung und kein Abo.
+          </dd>
+        </div>
+        <div class="sp-faq-item">
+          <dt>Was passiert nach 12 Monaten?</dt>
+          <dd>
+            Ihr Basis-Zugang zu allen Inhalten, die Sie erworben haben, bleibt
+            <strong>lebenslang</strong> bestehen. Die aktiven Inhaltsaktualisierungen
+            und die Reviewer-Garantie laufen nach 12 Monaten aus. Sie entscheiden
+            dann selbst, ob Sie Ihren Zugang verlängern möchten.
+          </dd>
+        </div>
+        <div class="sp-faq-item">
+          <dt>Ist das eine Medizinprodukt-App oder DiGA?</dt>
+          <dd>
+            Nein. Typ2-Kompass ist ein Bildungs- und Reflexionswerkzeug und kein
+            zugelassenes Medizinprodukt. Es ersetzt keine ärztliche Beratung,
+            Diagnose oder Behandlung. Bitte klären Sie medizinische Fragen stets
+            mit Ihrem Arzt oder Ihrer Ärztin.
+          </dd>
+        </div>
+        <div class="sp-faq-item">
+          <dt>Von wem werden die Inhalte geprüft?</dt>
+          <dd>
+            Alle Inhalte durchlaufen unser Reviewer-Programm. Quellen stammen
+            ausschließlich aus anerkannten medizinischen Leitlinien und Institutionen:
+            Deutsche Diabetes Gesellschaft (DDG), Nationale Versorgungsleitlinie (NVL),
+            IQWiG und Robert Koch-Institut (RKI).
+          </dd>
+        </div>
+        <div class="sp-faq-item">
+          <dt>Kann ich den Kauf widerrufen?</dt>
+          <dd>
+            Das gesetzliche Widerrufsrecht für digitale Inhalte entfällt, wenn Sie
+            beim Kauf ausdrücklich zustimmen, dass der Inhalt sofort bereitgestellt
+            wird und Sie damit auf Ihr Widerrufsrecht verzichten. Diese Zustimmung
+            erfolgt beim Checkout-Prozess.
+          </dd>
+        </div>
+        <div class="sp-faq-item">
+          <dt>Wie sicher ist meine Zahlung?</dt>
+          <dd>
+            Die Zahlung wird sicher über Stripe abgewickelt. Wir speichern keine
+            Kreditkartendaten. Stripe ist PCI-DSS-zertifiziert.
+          </dd>
+        </div>
+        <div class="sp-faq-item">
+          <dt>Was passiert nach dem Kauf?</dt>
+          <dd>
+            Sie erhalten sofort Zugang zu Typ2-Kompass unter
+            <code>mein.typ2-kompass.de</code>. Ein Aktivierungs-Code und Ihre
+            Zugangsdaten werden per E-Mail zugeschickt.
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ── Abschluss-CTA ──────────────────────────────────────────── -->
+  <section class="sp-section sp-section--cta">
+    <div class="sp-container" style="text-align:center;">
+      <h2 class="sp-h2" style="color:#fff;">Bereit für mehr Orientierung?</h2>
+      <p style="color:rgba(255,255,255,0.85); font-size:1.1rem; margin: 0 auto 2rem; max-width: 44ch;">
+        Einmal zahlen. 12 Monate aktive Updates. Lebenslanger Basis-Zugang.
+      </p>
+      <button
+        id="cta-bottom"
+        class="sp-btn-primary sp-btn-light"
+        data-cta="bottom"
+        onclick="handleKauf(this)"
+        type="button"
+      >
+        Jetzt zugreifen — €&thinsp;49 einmalig
+      </button>
+      <p style="color:rgba(255,255,255,0.65); font-size:.9rem; margin-top:.75rem;">
+        Kein Abo · Sofortiger Zugang · Sicherer Checkout via Stripe
+      </p>
+    </div>
+  </section>
+
+  <style>
+    /* ── Layout helpers ─────────────────────────────────────── */
+    .sp-container {
+      max-width: 64rem;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+    .sp-prose {
+      max-width: 52rem;
+    }
+    .sp-section {
+      padding: 4rem 0;
+    }
+    .sp-section--alt {
+      background: var(--color-brand-soft);
+    }
+    .sp-section--cta {
+      background: var(--color-brand);
+      padding: 5rem 0;
+    }
+
+    /* ── Typography ─────────────────────────────────────────── */
+    .sp-eyebrow {
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--color-brand);
+      margin: 0 0 .5rem;
+    }
+    .sp-h1 {
+      font-family: var(--font-serif);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      line-height: 1.15;
+      letter-spacing: -.01em;
+      margin: 0 0 1.25rem;
+    }
+    .sp-h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 3.5vw, 2.25rem);
+      line-height: 1.2;
+      letter-spacing: -.01em;
+      margin: 0 0 1.25rem;
+    }
+    .sp-subhead {
+      font-size: 1.15rem;
+      color: var(--color-ink-muted);
+      max-width: 50ch;
+      margin: 0 0 2rem;
+      line-height: 1.65;
+    }
+
+    /* ── Hero ───────────────────────────────────────────────── */
+    .sp-hero {
+      padding: 4rem 0 5rem;
+    }
+    .sp-kein-abo-badge {
+      display: inline-block;
+      background: var(--color-brand);
+      color: #fff;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .2rem .7rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+
+    /* ── CTA buttons ────────────────────────────────────────── */
+    .sp-btn-primary {
+      display: inline-block;
+      background: var(--color-brand);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      padding: .9rem 2rem;
+      border-radius: var(--radius-sm);
+      font-weight: 700;
+      font-size: 1.05rem;
+      font-family: var(--font-sans);
+      letter-spacing: -.01em;
+      transition: filter .15s;
+    }
+    .sp-btn-primary:hover {
+      filter: brightness(1.1);
+    }
+    .sp-btn-primary:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+    .sp-btn-full {
+      display: block;
+      width: 100%;
+      text-align: center;
+    }
+    .sp-btn-light {
+      background: #fff;
+      color: var(--color-brand);
+    }
+    .sp-cta-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: .5rem;
+    }
+    .sp-cta-sub {
+      font-size: .875rem;
+      color: var(--color-ink-soft);
+      margin: 0;
+    }
+
+    /* ── Feature grid ───────────────────────────────────────── */
+    .sp-feature-grid {
+      list-style: none;
+      padding: 0;
+      margin: 2rem 0 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+      gap: 1.25rem;
+    }
+    .sp-feature-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      box-shadow: var(--shadow-card);
+    }
+    .sp-feature-icon {
+      font-size: 1.75rem;
+      margin-bottom: .5rem;
+      line-height: 1;
+    }
+    .sp-feature-card h3 {
+      margin: 0 0 .5rem;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    .sp-feature-card p {
+      margin: 0;
+      font-size: .925rem;
+      color: var(--color-ink-muted);
+      line-height: 1.55;
+    }
+
+    /* ── Trust strip ────────────────────────────────────────── */
+    .sp-trust-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .sp-trust-item {
+      text-align: center;
+      font-size: .875rem;
+      color: var(--color-ink-muted);
+      max-width: 8rem;
+    }
+    .sp-trust-logo {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 4rem;
+      height: 4rem;
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      box-shadow: var(--shadow-card);
+      font-weight: 700;
+      font-size: .95rem;
+      color: var(--color-brand);
+      margin-bottom: .5rem;
+    }
+    .sp-reviewer-note {
+      background: var(--color-surface);
+      border-left: 3px solid var(--color-brand);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      padding: 1rem 1.25rem;
+      font-size: .925rem;
+      color: var(--color-ink-muted);
+      max-width: 56rem;
+      margin: 0 auto;
+    }
+    .sp-reviewer-note p { margin: 0; }
+
+    /* ── Pricing ────────────────────────────────────────────── */
+    .sp-pricing-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .sp-pricing-card {
+      background: var(--color-surface);
+      border-radius: var(--radius-md);
+      box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.07);
+      padding: 2.5rem 2rem;
+      max-width: 28rem;
+      width: 100%;
+      position: relative;
+    }
+    .sp-pricing-badge {
+      display: inline-block;
+      background: var(--color-brand);
+      color: #fff;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: .2rem .7rem;
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    .sp-pricing-amount {
+      font-family: var(--font-serif);
+      font-size: 4rem;
+      font-weight: 600;
+      line-height: 1;
+      color: var(--color-ink);
+      margin-bottom: .25rem;
+    }
+    .sp-pricing-currency {
+      font-size: 2rem;
+      vertical-align: super;
+      font-weight: 400;
+    }
+    .sp-pricing-vat {
+      font-size: .875rem;
+      color: var(--color-ink-soft);
+      margin: 0 0 1.5rem;
+    }
+    .sp-pricing-features {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+      font-size: .95rem;
+      color: var(--color-ink-muted);
+    }
+    .sp-pricing-b2b {
+      text-align: center;
+      font-size: .875rem;
+      color: var(--color-ink-soft);
+      margin: 1.25rem 0 0;
+    }
+
+    /* ── FAQ ────────────────────────────────────────────────── */
+    .sp-faq {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: 1.5rem 0 0;
+    }
+    .sp-faq-item {
+      border-bottom: 1px solid var(--color-rule);
+      padding: 1.25rem 0;
+    }
+    .sp-faq-item:first-child { border-top: 1px solid var(--color-rule); }
+    .sp-faq dt {
+      font-weight: 600;
+      margin-bottom: .4rem;
+      color: var(--color-ink);
+    }
+    .sp-faq dd {
+      margin: 0;
+      color: var(--color-ink-muted);
+      font-size: .95rem;
+      line-height: 1.65;
+    }
+  </style>
+
+  <script is:inline>
+    var APP_URL = "https://app.typ2-kompass.de";
+
+    function handleKauf(btn) {
+      btn.disabled = true;
+      var originalText = btn.textContent;
+      btn.textContent = "Weiterleitung zu Stripe…";
+
+      var cta = btn.dataset.cta || "unknown";
+      try {
+        if (typeof window.plausible === "function") {
+          window.plausible("cta_clicked", { props: { location: cta } });
+        }
+      } catch (e) {}
+
+      fetch(APP_URL + "/api/billing/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ productType: "b2c_annual" }),
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error("checkout_failed");
+          return res.json();
+        })
+        .then(function (data) {
+          if (data && data.url) {
+            window.location.href = data.url;
+          } else {
+            throw new Error("no_url");
+          }
+        })
+        .catch(function () {
+          btn.disabled = false;
+          btn.textContent = originalText;
+          alert(
+            "Der Checkout konnte nicht gestartet werden. Bitte versuchen Sie es erneut oder schreiben Sie uns an hallo@typ2-kompass.de."
+          );
+        });
+    }
+  </script>
 </BaseLayout>
