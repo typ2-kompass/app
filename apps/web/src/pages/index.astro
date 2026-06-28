@@ -632,8 +632,10 @@ const faqSchema = {
       fetch(APP_URL + "/api/billing/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ productType: "b2c_annual" }),
+        body: JSON.stringify({
+          productSku: "kompass_b2c_einmal_v1",
+          quantity: 1,
+        }),
       })
         .then(function (res) {
           if (!res.ok) throw new Error("checkout_failed");

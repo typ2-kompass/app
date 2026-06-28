@@ -34,6 +34,44 @@ const STRIPE_API = "https://api.stripe.com/v1/checkout/sessions";
 const REFERRER_MAX_LEN = 128;
 const COUPON_MAX_LEN = 64;
 
+// Sales site (Astro) and Next.js app live on different hosts in production
+// (typ2-kompass.de / mein.typ2-kompass.de → app.typ2-kompass.de), so the
+// browser issues a CORS preflight before POSTing the SKU. Allow only our
+// known sales origins; never reflect arbitrary Origin headers.
+const ALLOWED_ORIGINS = new Set<string>([
+  "https://typ2-kompass.de",
+  "https://www.typ2-kompass.de",
+  "https://mein.typ2-kompass.de",
+  // CF Pages preview deployments — used for staging walk-throughs.
+  "https://typ2-kompass-app.pages.dev",
+]);
+
+function corsHeaders(origin: string | null): Record<string, string> {
+  if (!origin || !ALLOWED_ORIGINS.has(origin)) {
+    return {};
+  }
+  return {
+    "Access-Control-Allow-Origin": origin,
+    "Vary": "Origin",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Max-Age": "86400",
+  };
+}
+
+function withCors(response: Response, origin: string | null): Response {
+  const headers = corsHeaders(origin);
+  for (const [k, v] of Object.entries(headers)) {
+    response.headers.set(k, v);
+  }
+  return response;
+}
+
+export function OPTIONS(request: Request): Response {
+  const origin = request.headers.get("origin");
+  return new Response(null, { status: 204, headers: corsHeaders(origin) });
+}
+
 type CheckoutPayload = {
   productSku?: unknown;
   quantity?: unknown;
@@ -186,27 +224,35 @@ async function createStripeSession(
 }
 
 export async function POST(request: Request): Promise<Response> {
+  const origin = request.headers.get("origin");
+
   const body = (await request.json().catch(() => null)) as
     | CheckoutPayload
     | null;
   if (!body || typeof body !== "object") {
-    return badRequest("invalid_body");
+    return withCors(badRequest("invalid_body"), origin);
   }
 
   const validated = validate(body);
   if (validated instanceof Response) {
-    return validated;
+    return withCors(validated, origin);
   }
 
   const env = await getAppEnv();
   if (!env.STRIPE_SECRET_KEY) {
-    return NextResponse.json({ error: "stripe_not_configured" }, { status: 503 });
+    return withCors(
+      NextResponse.json({ error: "stripe_not_configured" }, { status: 503 }),
+      origin,
+    );
   }
   const priceId = env[validated.product.priceEnvKey];
   if (!priceId) {
-    return NextResponse.json(
-      { error: "price_not_configured", sku: validated.product.sku },
-      { status: 503 },
+    return withCors(
+      NextResponse.json(
+        { error: "price_not_configured", sku: validated.product.sku },
+        { status: 503 },
+      ),
+      origin,
     );
   }
 
@@ -237,7 +283,10 @@ export async function POST(request: Request): Promise<Response> {
   );
 
   if (!result.ok) {
-    return NextResponse.json({ error: result.error }, { status: result.status });
+    return withCors(
+      NextResponse.json({ error: result.error }, { status: result.status }),
+      origin,
+    );
   }
 
   // Plausible funnel event — fire-and-forget; never blocks the redirect.
@@ -252,5 +301,5 @@ export async function POST(request: Request): Promise<Response> {
     },
   });
 
-  return NextResponse.json({ url: result.url });
+  return withCors(NextResponse.json({ url: result.url }), origin);
 }
