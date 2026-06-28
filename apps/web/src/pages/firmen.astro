@@ -2,9 +2,9 @@
 import BaseLayout from '~/layouts/BaseLayout.astro';
 
 const tiers = [
-  { seats: '5–24 Sitze', price: '€ 49 / Sitz', note: 'Mindest-Order 5 Sitze' },
+  { seats: '5–24 Sitze', price: '€ 49 / Sitz', note: 'Mindestabnahme 5 Sitze' },
   { seats: '25–99 Sitze', price: '€ 39 / Sitz', note: '' },
-  { seats: 'Ab 100 Sitze', price: '€ 29 / Sitz', note: 'Auf Anfrage' },
+  { seats: 'Ab 100 Sitze', price: '€ 29 / Sitz', note: 'Individuelles Angebot' },
 ];
 ---
 
@@ -20,9 +20,9 @@ const tiers = [
       Typ2-Kompass für Ihr Team
     </h1>
     <p style="font-size: 1.1rem; color: var(--color-ink-muted); max-width: 52ch; line-height: 1.65; margin: 0 0 3rem;">
-      Betriebliche Gesundheitsförderung mit evidenzbasiertem Inhalt.
-      Mitarbeitende mit Typ&#8209;2&#8209;Diabetes erhalten strukturierte, fachlich geprüfte
-      Begleitung — einmalig, ohne Abo-Verpflichtung.
+      Betriebliche Gesundheitsförderung, die wirklich trägt: Mitarbeitende mit
+      Typ&#8209;2&#8209;Diabetes erhalten strukturierte, fachlich geprüfte Begleitung —
+      einmalig eingekauft, kein Abo, keine versteckten Folgekosten.
     </p>
 
     <!-- Staffelpreise -->
@@ -40,8 +40,8 @@ const tiers = [
 
     <div style="background: var(--color-brand-soft); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 3rem; max-width: 52ch;">
       <p style="margin: 0; font-size: .95rem; color: var(--color-ink-muted);">
-        <strong>Aktivierungs-Mechanik:</strong> Nach Ihrer Bestellung erhalten Sie einen
-        Pool an Aktivierungs-Codes. Ihre Mitarbeitenden lösen diese selbst unter
+        <strong>So funktioniert die Aktivierung:</strong> Nach Ihrer Bestellung erhalten Sie
+        die passende Anzahl Aktivierungs-Codes. Ihre Mitarbeitenden lösen diese selbst unter
         <code>mein.typ2-kompass.de</code> ein — ohne dass Sie Nutzerdaten zentral
         verwalten müssen.
       </p>
@@ -50,7 +50,7 @@ const tiers = [
     <!-- Kontaktformular -->
     <h2 style="font-family: var(--font-serif); font-size: 1.6rem; margin: 0 0 .75rem;">Anfrage stellen</h2>
     <p style="color: var(--color-ink-muted); margin: 0 0 1.5rem; max-width: 48ch;">
-      Kein Self-Checkout. Wir melden uns persönlich mit einem Angebot.
+      Keine automatische Abwicklung — wir melden uns persönlich mit einem Angebot.
     </p>
 
     <form
@@ -97,7 +97,7 @@ const tiers = [
           <option value="">— bitte wählen —</option>
           <option value="5-24">5–24 Sitze (€49 / Sitz)</option>
           <option value="25-99">25–99 Sitze (€39 / Sitz)</option>
-          <option value="100+">100+ Sitze (€29 / Sitz, auf Anfrage)</option>
+          <option value="100+">100+ Sitze (€29 / Sitz, individuelles Angebot)</option>
         </select>
       </div>
       <div>
